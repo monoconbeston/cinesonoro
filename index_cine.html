@@ -9,19 +9,17 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="CineSonoro">
-    <meta name="theme-color" content="#0d050e">
-
-    <!-- Librería QR Scanner -->
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <meta name="theme-color" content="#090e1a">
 
     <style>
         :root {
-            --bg-dark: #0d050e;
-            --card-bg: rgba(22, 11, 28, 0.95);
+            --bg-dark: #090e1a;
+            --card-bg: #10192d;
             --accent-gold: #ffb703;
+            --accent-cyan: #00d2ff;
             --accent-red: #e63946;
             --text-main: #ffffff;
-            --text-muted: #a0a0b0;
+            --text-muted: #a0a8c0;
             --success: #38b000;
         }
 
@@ -34,7 +32,7 @@
         }
 
         body {
-            background: var(--bg-dark);
+            background: radial-gradient(circle at top, #101c38 0%, #090e1a 100%);
             color: var(--text-main);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             min-height: 100vh;
@@ -42,7 +40,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            padding: 15px;
+            padding: 12px;
             overflow-x: hidden;
         }
 
@@ -52,43 +50,83 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            padding-bottom: 20px;
         }
 
-        /* --- NAVEGACIÓN PRINCIPAL ENTRE MODOS --- */
+        /* --- LOGO Y CABECERA (Skin Cinesonoro) --- */
+        .header-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 5px 0 2px 0;
+        }
+
+        .popcorn-icon {
+            font-size: 2.2rem;
+            filter: drop-shadow(0 0 10px rgba(255, 183, 3, 0.6));
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .title-cine {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 12px rgba(0, 210, 255, 0.6);
+        }
+
+        .title-sonoro {
+            color: var(--accent-gold);
+            text-shadow: 0 0 12px rgba(255, 183, 3, 0.6);
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- NAVEGACIÓN DE MODOS --- */
         .mode-nav {
             display: flex;
             width: 100%;
-            max-width: 420px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
+            background: #121e38;
+            border-radius: 20px;
             padding: 4px;
-            gap: 4px;
-            margin-bottom: 5px;
-            border: 1px solid rgba(255, 183, 3, 0.2);
+            gap: 6px;
+            border: 1px solid rgba(255, 183, 3, 0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
         .nav-btn {
             flex: 1;
-            padding: 10px 4px;
+            padding: 10px 6px;
             border: none;
             background: transparent;
             color: var(--text-muted);
             font-weight: 800;
-            font-size: 0.8rem;
-            border-radius: 12px;
+            font-size: 0.82rem;
+            border-radius: 16px;
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: center;
         }
 
         .nav-btn.active {
-            background: var(--accent-gold);
-            color: #000;
-            box-shadow: 0 2px 10px rgba(255, 183, 3, 0.4);
+            background: linear-gradient(135deg, var(--accent-cyan) 0%, #0077b6 100%);
+            color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 210, 255, 0.4);
+            font-weight: 900;
         }
 
-        /* --- VISTAS DE CADA MODO --- */
+        /* --- VISTAS --- */
         .app-view {
             display: none;
             width: 100%;
@@ -99,31 +137,11 @@
             display: block;
         }
 
-        /* --- CABECERA --- */
-        .header-title {
-            font-size: 1.5rem;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            background: linear-gradient(135deg, #ffb703 0%, #e63946 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            margin-bottom: 2px;
-            text-align: center;
-        }
-
-        .subtitle {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        /* --- 1. MODO MAZO / CARTAS --- */
+        /* --- CARTA PRINCIPAL (Skin Cinesonoro) --- */
         .card-display {
             background: var(--card-bg);
             border: 2px solid var(--accent-gold);
-            border-radius: 24px;
+            border-radius: 26px;
             padding: 20px;
             width: 100%;
             min-height: 380px;
@@ -132,22 +150,22 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 183, 3, 0.15);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 183, 3, 0.35);
             text-align: center;
         }
 
         .card-type-badge {
             position: absolute;
-            top: -12px;
-            background: var(--accent-gold);
+            top: -13px;
+            background: linear-gradient(135deg, #ffc107 0%, #ff8800 100%);
             color: #000;
             font-weight: 900;
             font-size: 0.75rem;
-            padding: 4px 14px;
+            padding: 5px 16px;
             border-radius: 20px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
         }
 
         .card-mask {
@@ -158,10 +176,61 @@
             justify-content: center;
         }
 
-        .mask-icon {
-            font-size: 3rem;
-            margin-bottom: 8px;
-            filter: drop-shadow(0 0 10px rgba(255, 183, 3, 0.5));
+        /* --- ILUSTRACIÓN DE ESCUCHA (AUDÍFONOS Y OREJA 3D) --- */
+        .skin-illustration-box {
+            width: 100%;
+            background: #0a1122;
+            border: 1.5px solid rgba(255, 183, 3, 0.25);
+            border-radius: 20px;
+            padding: 18px 10px;
+            margin: 10px 0 15px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+        }
+
+        .headphone-art {
+            font-size: 3.8rem;
+            line-height: 1;
+            margin-bottom: 6px;
+            filter: drop-shadow(0 0 15px rgba(255, 183, 3, 0.6));
+            animation: pulseGlow 2s infinite alternate;
+        }
+
+        .skin-art-text {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        /* --- BOTÓN PRINCIPAL DE AUDIO (Skin Cinesonoro) --- */
+        .btn-play-skin {
+            background: linear-gradient(180deg, #ffc107 0%, #ff9800 100%);
+            color: #000000;
+            font-weight: 900;
+            font-size: 1.05rem;
+            padding: 16px 20px;
+            border-radius: 30px;
+            border: 2px solid #ffe066;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 6px 20px rgba(255, 183, 3, 0.5), inset 0 2px 4px rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-play-skin:active {
+            transform: scale(0.97);
+            box-shadow: 0 2px 10px rgba(255, 183, 3, 0.3);
         }
 
         .movie-title-revealed {
@@ -170,7 +239,7 @@
             color: var(--accent-gold);
             margin: 10px 0 5px 0;
             line-height: 1.2;
-            text-shadow: 0 0 10px rgba(255, 183, 3, 0.3);
+            text-shadow: 0 0 10px rgba(255, 183, 3, 0.4);
         }
 
         .movie-details {
@@ -179,31 +248,64 @@
             margin-bottom: 12px;
         }
 
-        .timer-container {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 183, 3, 0.3);
-            border-radius: 16px;
-            padding: 10px;
+        /* --- MARCADOR DE EQUIPOS (Skin Cinesonoro) --- */
+        .skin-scores-container {
+            display: flex;
             width: 100%;
+            gap: 10px;
             margin-top: 10px;
         }
 
-        .timer-display {
-            font-size: 2.2rem;
+        .skin-score-capsule {
+            flex: 1;
+            background: #121e38;
+            border: 1.5px solid rgba(255, 183, 3, 0.4);
+            border-radius: 20px;
+            padding: 12px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skin-score-capsule::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 15%;
+            width: 70%;
+            height: 3px;
+            background: var(--accent-gold);
+            border-radius: 2px;
+            box-shadow: 0 0 8px var(--accent-gold);
+        }
+
+        .skin-team-label {
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .skin-team-val {
+            font-size: 1.6rem;
             font-weight: 900;
             color: var(--accent-gold);
             font-family: monospace;
-            margin: 2px 0;
+            margin-top: 2px;
         }
 
-        /* --- BOTONES --- */
+        /* --- BOTONES DE ACCIÓN SECUNDARIOS (Pill Buttons) --- */
         .btn {
             width: 100%;
             padding: 14px;
             border: none;
-            border-radius: 16px;
+            border-radius: 20px;
             font-weight: 900;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             cursor: pointer;
             transition: all 0.2s ease;
             text-transform: uppercase;
@@ -214,68 +316,63 @@
             gap: 8px;
             background: linear-gradient(135deg, var(--accent-gold) 0%, #ff8800 100%);
             color: #000;
-            box-shadow: 0 4px 15px rgba(255, 183, 3, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 183, 3, 0.35);
         }
 
         .btn:active {
             transform: scale(0.97);
         }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
+        .btn-pill-dark {
+            background: #121e38;
             color: var(--text-main);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: none;
+            border: 1.5px solid rgba(255, 183, 3, 0.35);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border-radius: 25px;
         }
 
-        .btn-gold {
-            background: linear-gradient(135deg, #00f5d4 0%, #00b4d8 100%);
-            color: #000;
-            box-shadow: 0 4px 15px rgba(0, 245, 212, 0.3);
+        .btn-cyan {
+            background: linear-gradient(135deg, var(--accent-cyan) 0%, #0077b6 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
         }
 
-        /* --- 2. MODO ESCÁNER QR --- */
-        #scanner-box {
-            width: 100%;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 2px solid var(--accent-gold);
-            background: #000;
-            display: none;
-        }
-
-        #reader {
-            width: 100%;
-        }
-
-        .spotify-container {
-            position: relative;
-            width: 100%;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 2px solid var(--accent-gold);
-            background: #000;
-        }
-
-        .spotify-mask-overlay {
-            position: absolute;
-            top: 0;
+        /* --- BOTTOM NAV BAR (Skin Cinesonoro) --- */
+        .bottom-navbar {
+            position: fixed;
+            bottom: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: rgba(13, 5, 14, 0.95);
+            background: #0a1122;
+            border-top: 1px solid rgba(255, 183, 3, 0.25);
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent-gold);
-            font-weight: 900;
-            font-size: 1rem;
-            cursor: pointer;
-            z-index: 10;
-            backdrop-filter: blur(5px);
+            justify-content: space-around;
+            padding: 8px 0 12px 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
         }
 
-        /* --- 3. MODO CONTEO / MARCADOR DE EQUIPOS --- */
+        .navbar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .navbar-item.active {
+            color: var(--accent-gold);
+        }
+
+        .navbar-icon {
+            font-size: 1.2rem;
+        }
+
+        /* --- MARCADOR COMPLETO Y CONTROLES --- */
         .scoreboard {
             display: flex;
             flex-direction: column;
@@ -284,9 +381,9 @@
         }
 
         .team-card {
-            background: rgba(0, 0, 0, 0.5);
+            background: #10192d;
             border: 1.5px solid rgba(255, 183, 3, 0.3);
-            border-radius: 18px;
+            border-radius: 20px;
             padding: 15px;
             display: flex;
             justify-content: space-between;
@@ -294,7 +391,7 @@
         }
 
         .team-name {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 900;
             color: var(--text-main);
             text-align: left;
@@ -339,14 +436,19 @@
         .winner-banner {
             background: linear-gradient(135deg, var(--accent-gold) 0%, #ff8800 100%);
             color: #000;
-            padding: 20px;
+            padding: 18px;
             border-radius: 20px;
             font-weight: 900;
-            font-size: 1.3rem;
-            margin-bottom: 15px;
+            font-size: 1.25rem;
+            margin-bottom: 12px;
             animation: pulse 1s infinite alternate;
             display: none;
             text-align: center;
+        }
+
+        @keyframes pulseGlow {
+            from { filter: drop-shadow(0 0 10px rgba(255, 183, 3, 0.4)); }
+            to { filter: drop-shadow(0 0 20px rgba(0, 210, 255, 0.8)); }
         }
 
         @keyframes pulse {
@@ -362,79 +464,78 @@
 </head>
 <body>
 
-    <!-- NAVEGACIÓN ENTRE MODOS -->
-    <div class="mode-nav">
-        <button class="nav-btn active" id="nav-mazo" onclick="cambiarModo('mazo')">🎴 Mazo</button>
-        <button class="nav-btn" id="nav-escaner" onclick="cambiarModo('escaner')">📷 Escáner</button>
-        <button class="nav-btn" id="nav-conteo" onclick="cambiarModo('conteo')">📊 Conteo (<span id="nav-target-display">10</span> pts)</button>
-    </div>
-
     <div class="container">
-        <!-- CABECERA DE LA APP -->
-        <div class="header-title">🍿 CINESONORO</div>
-        <div class="subtitle" id="sub-status">Adivina la Película</div>
+        <!-- LOGO CINESONORO -->
+        <div class="header-brand">
+            <div class="popcorn-icon">🍿</div>
+            <div class="header-title">
+                <span class="title-cine">CINE</span><span class="title-sonoro">SONORO</span>
+            </div>
+        </div>
+        <div class="subtitle" id="sub-status">Adivina el Nombre de la Película</div>
+
+        <!-- NAVEGACIÓN ENTRE MODOS -->
+        <div class="mode-nav">
+            <button class="nav-btn active" id="nav-mazo" onclick="cambiarModo('mazo')">🎴 Mazo Juego</button>
+            <button class="nav-btn" id="nav-conteo" onclick="cambiarModo('conteo')">📊 Marcador (<span id="nav-target-display">10</span> pts)</button>
+        </div>
 
         <!-- ==================== VISTA 1: MODO MAZO ==================== -->
         <div id="view-mazo" class="app-view active-view">
             <div class="card-display" id="deck-card">
                 <div class="card-type-badge" id="deck-badge">🎬 PELÍCULA NORMAL</div>
                 
-                <!-- Máscara 1: Para Películas Normales y QR+ (Música y QR) -->
+                <!-- Máscara 1: Para Películas Normales -->
                 <div class="card-mask" id="deck-normal-mask" style="display: block;">
-                    <div class="mask-icon">🎬</div>
-                    <div style="font-weight: 800; color: var(--accent-gold); margin-bottom: 8px;">¿QUÉ PELÍCULA ES?</div>
                     
-                    <!-- Código QR para Escanear (30s de Música) -->
-                    <div id="deck-qr-container" style="margin: 10px 0; text-align: center;">
-                        <img id="deck-qr-img" src="" alt="QR Música" style="width: 150px; height: 150px; border-radius: 12px; border: 2px solid var(--accent-gold); box-shadow: 0 4px 15px rgba(255,183,3,0.3); background: #fff; padding: 4px;">
-                        <div style="font-size: 0.78rem; color: var(--accent-gold); margin-top: 6px; font-weight: 800;">📱 Escanea este QR para escuchar la música</div>
+                    <!-- Ilustración de Escuchar (Imagen escuchar.png) -->
+                    <div class="skin-illustration-box">
+                        <img src="Imagen escuchar.png" alt="Escuchar" onerror="this.onerror=null; this.src='imagen_escuchar.png'; this.parentElement.querySelector('.fallback-art').style.display='block';" style="max-width: 140px; width: 80%; height: auto; margin-bottom: 8px; filter: drop-shadow(0 0 12px rgba(255, 183, 3, 0.5)); border-radius: 12px;">
+                        <div class="fallback-art" style="display:none; font-size: 3.5rem; margin-bottom: 6px;">🎧👂🎶</div>
+                        <div class="skin-art-text">¡Presta mucha atención!</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">Escucha los 30s de música y adivina la película</div>
                     </div>
 
-                    <!-- Reproductor NATIVO Integrado en la App (Sin redirección, 100% oculto) -->
-                    <div id="deck-player-container" style="margin: 15px 0; width: 100%;">
+                    <!-- Reproductor NATIVO Integrado -->
+                    <div id="deck-player-container" style="margin: 10px 0; width: 100%;">
                         <audio id="game-audio" preload="auto"></audio>
                         
-                        <button id="btn-play-audio" onclick="toggleAudioMazo()" style="background: linear-gradient(135deg, var(--accent-gold) 0%, #ff8800 100%); color: #000; font-weight: 900; font-size: 1rem; padding: 16px; border-radius: 18px; border: none; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 4px 15px rgba(255, 183, 3, 0.4); cursor: pointer; transition: all 0.2s ease;">
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div id="audio-btn-circle" style="width: 44px; height: 44px; border-radius: 50%; background: #0d050e; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: var(--accent-gold); flex-shrink: 0; box-shadow: 0 0 10px rgba(0,0,0,0.5);">▶️</div>
-                                <div style="text-align: left;">
-                                    <div id="audio-btn-text" style="font-size: 0.95rem; font-weight: 900; letter-spacing: 0.5px; color: #000;">ESCUCHAR CANCIÓN</div>
-                                    <div id="audio-btn-sub" style="font-size: 0.72rem; color: rgba(0,0,0,0.7); font-weight: 700; margin-top: 2px;">🔒 Carátula y Datos Ocultos</div>
-                                </div>
-                            </div>
-                            <div id="audio-timer-badge" style="font-size: 0.85rem; font-weight: 900; background: #0d050e; color: var(--accent-gold); padding: 6px 12px; border-radius: 12px; display: none;">30s</div>
+                        <button id="btn-play-audio" class="btn-play-skin" onclick="toggleAudioMazo()">
+                            <span id="audio-btn-circle" style="font-size: 1.3rem;">▶️</span>
+                            <span id="audio-btn-text">ESCUCHAR CANCIÓN</span>
+                            <span id="audio-timer-badge" style="font-size: 0.85rem; background: #000; color: var(--accent-gold); padding: 4px 10px; border-radius: 12px; display: none;">30s</span>
                         </button>
                     </div>
                     
-                    <button class="btn btn-gold" id="btn-revelar-normal" onclick="revelarPeliculaMazo()" style="margin-top: 10px;">👁️ REVELAR PELÍCULA</button>
+                    <button class="btn btn-cyan" id="btn-revelar-normal" onclick="revelarPeliculaMazo()" style="margin-top: 10px;">👁️ REVELAR PELÍCULA</button>
                 </div>
 
                 <!-- Máscara 2: Para DESAFÍOS (Tararea, Palabra Prohibida, Mímica) -->
-                <div class="card-mask" id="deck-challenge-mask" style="display: none; background: rgba(13,5,14,0.95); border: 2px solid var(--accent-gold); border-radius: 16px; padding: 20px;">
-                    <div class="mask-icon" style="font-size: 2.5rem; margin-bottom: 10px;">🔒</div>
-                    <div style="font-weight: 900; color: var(--accent-gold); font-size: 1.1rem; margin-bottom: 6px;">DESAFÍO EN SECRETO</div>
-                    <div style="font-size: 0.85rem; color: #ddd; margin-bottom: 15px; line-height: 1.4;">
-                        Un participante toma el teléfono. La película y la canción están ocultas para que tus compañeros puedan adivinar.
+                <div class="card-mask" id="deck-challenge-mask" style="display: none; background: #0a1122; border: 2px solid var(--accent-gold); border-radius: 20px; padding: 20px;">
+                    <div style="font-size: 2.8rem; margin-bottom: 8px;">🔒</div>
+                    <div style="font-weight: 900; color: var(--accent-gold); font-size: 1.15rem; margin-bottom: 6px;">DESAFÍO EN SECRETO</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.4;">
+                        Un participante toma el teléfono. La película está oculta para que tus compañeros puedan adivinar.
                     </div>
-                    <button class="btn btn-gold" onclick="accionarVerDesafioPrivado()" style="font-size: 0.92rem; font-weight: 900; padding: 14px;">
-                        👁️ VER MI DESAFÍO Y PELÍCULA (EN SECRETO)
+                    <button class="btn btn-cyan" onclick="accionarVerDesafioPrivado()" style="font-size: 0.9rem; font-weight: 900; padding: 14px;">
+                        👁️ VER MI DESAFÍO (EN SECRETO)
                     </button>
                 </div>
 
                 <!-- Panel Secreto del Participante (Tras accionar) -->
-                <div id="deck-challenge-secret" style="display: none; background: rgba(255,183,3,0.06); border: 1.5px solid var(--accent-gold); border-radius: 16px; padding: 15px; width: 100%; text-align: center;">
+                <div id="deck-challenge-secret" style="display: none; background: rgba(255,183,3,0.06); border: 1.5px solid var(--accent-gold); border-radius: 18px; padding: 15px; width: 100%; text-align: center;">
                     <div style="font-size: 0.75rem; color: var(--accent-gold); font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">
                         🎬 PELÍCULA A INTERPRETAR:
                     </div>
-                    <div class="movie-title-revealed" id="secret-title-text" style="font-size: 1.4rem; color: #fff; margin: 6px 0; font-weight: 900;">
+                    <div class="movie-title-revealed" id="secret-title-text" style="font-size: 1.5rem; color: #fff; margin: 6px 0; font-weight: 900;">
                         TITANIC
                     </div>
                     <div class="movie-details" id="secret-details-text" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
                         Tema: My Heart Will Go On (1997)
                     </div>
 
-                    <div id="secret-instruction-box" style="background: rgba(0,0,0,0.6); border-radius: 12px; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.15);">
-                        <div id="secret-type-title" style="font-size: 0.9rem; font-weight: 900; color: #00f5d4; margin-bottom: 6px;">
+                    <div id="secret-instruction-box" style="background: rgba(0,0,0,0.6); border-radius: 14px; padding: 12px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.15);">
+                        <div id="secret-type-title" style="font-size: 0.9rem; font-weight: 900; color: var(--accent-cyan); margin-bottom: 6px;">
                             🎵 DESAFÍO: TARAREA
                         </div>
                         <div id="secret-instruction-text" style="font-size: 0.88rem; color: #fff; line-height: 1.4; white-space: pre-line;">
@@ -442,24 +543,24 @@
                         </div>
                     </div>
 
-                    <!-- Reproductor Secreto NATIVO (30s) -->
+                    <!-- Reproductor Secreto (30s) -->
                     <div id="secret-player-box" style="margin: 12px 0; background: rgba(0,0,0,0.5); border-radius: 12px; padding: 10px; border: 1px solid rgba(255,183,3,0.3);">
                         <div style="font-size: 0.78rem; color: var(--accent-gold); font-weight: 800; margin-bottom: 6px;">
                             🎧 ¿No recuerdas la canción? Escúchala 30s en secreto:
                         </div>
-                        <button class="btn btn-secondary" id="btn-secret-play" style="padding: 10px 12px; font-size: 0.85rem; width: 100%; background: rgba(255,183,3,0.15); border: 1px solid var(--accent-gold); color: #fff; font-weight: 800;" onclick="toggleSecretAudio()">
+                        <button class="btn btn-pill-dark" id="btn-secret-play" style="padding: 10px 12px; font-size: 0.85rem; width: 100%; color: #fff; font-weight: 800;" onclick="toggleSecretAudio()">
                             ▶️ ESCUCHAR CANCIÓN (30s SECRETO)
                         </button>
                     </div>
 
                     <!-- Temporizador de 40s -->
-                    <div class="timer-container" id="timer-box" style="margin-bottom: 15px;">
+                    <div style="background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 183, 3, 0.3); border-radius: 14px; padding: 10px; width: 100%; margin-bottom: 12px;">
                         <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Tiempo Restante:</div>
-                        <div class="timer-display" id="timer-count" style="font-size: 2.2rem; font-weight: 900; color: var(--accent-gold); font-family: monospace; margin: 4px 0;">40s</div>
-                        <button class="btn btn-secondary" style="padding: 8px 15px; font-size: 0.8rem; width: auto;" onclick="iniciarTemporizador(40)">⏱️ INICIAR 40 SEGUNDOS</button>
+                        <div id="timer-count" style="font-size: 2.2rem; font-weight: 900; color: var(--accent-gold); font-family: monospace; margin: 4px 0;">40s</div>
+                        <button class="btn btn-pill-dark" style="padding: 8px 15px; font-size: 0.8rem; width: auto; margin: 0 auto;" onclick="iniciarTemporizador(40)">⏱️ INICIAR 40 SEGUNDOS</button>
                     </div>
 
-                    <button class="btn btn-gold" onclick="revelarPeliculaMazo()" style="font-size: 0.85rem; padding: 10px;">👁️ REVELAR A TODOS</button>
+                    <button class="btn btn-cyan" onclick="revelarPeliculaMazo()" style="font-size: 0.85rem; padding: 10px;">👁️ REVELAR A TODOS</button>
                 </div>
 
                 <!-- Detalle Revelado para Todos -->
@@ -470,30 +571,28 @@
                 </div>
             </div>
 
-            <button class="btn" onclick="sacarCartaMazo()" style="margin-top: 15px; font-size: 1rem; font-weight: 900;">🎲 SACAR NUEVA CARTA</button>
-        </div>
-
-        <!-- ==================== VISTA 2: MODO ESCÁNER QR ==================== -->
-        <div id="view-escaner" class="app-view">
-            <div id="scanner-box">
-                <div id="reader"></div>
+            <!-- Contador de Mazo y Botones de Acción -->
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 12px; padding: 0 4px;">
+                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 800;" id="deck-counter-text">Mazo: 0 / 100 jugadas</div>
+                <button class="btn-pill-dark" onclick="reiniciarMazo()" style="padding: 6px 14px; font-size: 0.78rem; border: 1px solid rgba(255,183,3,0.4); cursor: pointer;">🔄 REINICIAR MAZO</button>
             </div>
 
-            <div id="scanner-player" style="display: none;">
-                <div class="spotify-container" id="spotify-target"></div>
-                <button class="btn btn-gold" id="btn-revelar-qr" onclick="revelarPeliculaQR()" style="margin-top: 15px;">👁️ REVELAR PELÍCULA</button>
-                <button class="btn btn-secondary" onclick="activarCamaraQR()" style="margin-top: 10px;">📷 ESCANEAR OTRO QR</button>
+            <button class="btn" onclick="sacarCartaMazo()" style="margin-top: 10px; font-size: 1.05rem; font-weight: 900;">🎲 SACAR NUEVA CARTA</button>
+
+            <!-- Marcador Rápido de Equipos en la Pestaña Mazo (Skin Cinesonoro) -->
+            <div class="skin-scores-container" id="skin-mini-scores">
+                <!-- Se llena dinámicamente -->
             </div>
         </div>
 
-        <!-- ==================== VISTA 3: MODO CONTEO DE EQUIPOS ==================== -->
+        <!-- ==================== VISTA 2: MODO CONTEO / MARCADOR DE EQUIPOS ==================== -->
         <div id="view-conteo" class="app-view">
             <div class="winner-banner" id="winner-banner">
                 🏆 ¡GANADOR! 🏆<br>
                 <span id="winner-team-name">EQUIPO 1</span>
             </div>
 
-            <div class="target-config-box" style="background: rgba(255, 183, 3, 0.08); border: 1px solid var(--accent-gold); border-radius: 16px; padding: 12px 15px; margin-bottom: 15px; text-align: center;">
+            <div style="background: #10192d; border: 1.5px solid var(--accent-gold); border-radius: 18px; padding: 12px 15px; margin-bottom: 12px; text-align: center;">
                 <div style="font-size: 0.85rem; color: var(--accent-gold); font-weight: 800; margin-bottom: 8px; text-transform: uppercase;">
                     🎯 Meta de Aciertos para Ganar
                 </div>
@@ -501,17 +600,17 @@
                     <label style="font-size: 0.8rem; color: var(--text-muted);">Objetivo:</label>
                     <input type="number" id="input-meta-puntos" min="1" max="99" value="10" 
                         onchange="actualizarMetaPuntos(this.value)" 
-                        style="width: 65px; background: #000; color: #fff; border: 1.5px solid var(--accent-gold); border-radius: 8px; padding: 6px; text-align: center; font-weight: 900; font-size: 1.05rem;">
+                        style="width: 65px; background: #090e1a; color: #fff; border: 1.5px solid var(--accent-gold); border-radius: 8px; padding: 6px; text-align: center; font-weight: 900; font-size: 1.05rem;">
                     <div style="display: flex; gap: 4px;">
-                        <button class="btn" style="padding: 5px 8px; font-size: 0.75rem; background: rgba(255,183,3,0.2); border: 1px solid var(--accent-gold);" onclick="actualizarMetaPuntos(5)">5</button>
-                        <button class="btn" style="padding: 5px 8px; font-size: 0.75rem; background: rgba(255,183,3,0.2); border: 1px solid var(--accent-gold);" onclick="actualizarMetaPuntos(10)">10</button>
-                        <button class="btn" style="padding: 5px 8px; font-size: 0.75rem; background: rgba(255,183,3,0.2); border: 1px solid var(--accent-gold);" onclick="actualizarMetaPuntos(15)">15</button>
-                        <button class="btn" style="padding: 5px 8px; font-size: 0.75rem; background: rgba(255,183,3,0.2); border: 1px solid var(--accent-gold);" onclick="actualizarMetaPuntos(20)">20</button>
+                        <button class="btn-pill-dark" style="padding: 5px 8px; font-size: 0.75rem;" onclick="actualizarMetaPuntos(5)">5</button>
+                        <button class="btn-pill-dark" style="padding: 5px 8px; font-size: 0.75rem;" onclick="actualizarMetaPuntos(10)">10</button>
+                        <button class="btn-pill-dark" style="padding: 5px 8px; font-size: 0.75rem;" onclick="actualizarMetaPuntos(15)">15</button>
+                        <button class="btn-pill-dark" style="padding: 5px 8px; font-size: 0.75rem;" onclick="actualizarMetaPuntos(20)">20</button>
                     </div>
                 </div>
             </div>
 
-            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; text-align: center;">
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px; text-align: center;">
                 El primer equipo en adivinar <strong id="meta-display-text" style="color: var(--accent-gold);">10 películas</strong> gana la partida.
             </div>
 
@@ -519,20 +618,37 @@
                 <!-- Tarjetas de Equipos -->
             </div>
 
-            <button class="btn btn-secondary" style="margin-top: 20px;" onclick="agregarEquipo()">➕ Agregar Nuevo Equipo</button>
-            <button class="btn btn-secondary" style="margin-top: 10px; background: rgba(230,57,70,0.2);" onclick="reiniciarMarcador()">🔄 Reiniciar Marcador</button>
+            <button class="btn btn-pill-dark" style="margin-top: 15px;" onclick="agregarEquipo()">➕ Agregar Nuevo Equipo</button>
+            <button class="btn btn-pill-dark" style="margin-top: 8px; background: rgba(230,57,70,0.2); border-color: var(--accent-red);" onclick="reiniciarMarcador()">🔄 Reiniciar Puntos a Cero</button>
+        </div>
+    </div>
+
+        <!-- CREDITO DE AUTOR -->
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 15px; margin-bottom: 5px; text-align: center; opacity: 0.75; font-weight: 700; letter-spacing: 0.5px;">
+            Creado por @monoconbeston 2026
         </div>
     </div>
 
     <script>
-        const PELICULAS = [{"title": "Titanic", "song": "My Heart Will Go On", "artist": "Celine Dion", "year": "1997", "search_query": "Titanic My Heart Will Go On Celine Dion", "forbidden_words": ["Barco", "Iceberg", "DiCaprio"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/54/5b/f7/545bf75d-1ea1-07f0-0c4e-a6d3bca7c092/mzaf_1410328638164863411.plus.aac.p.m4a"}, {"title": "El Padrino", "song": "Main Title / Speak Softly Love", "artist": "Nino Rota", "year": "1972", "search_query": "The Godfather Main Title Nino Rota", "forbidden_words": ["Mafia", "Corleone", "Oferta"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/5c/a6/76/5ca676fc-00ea-625b-aa23-ca8123edd306/mzaf_3787288201455456673.plus.aac.p.m4a"}, {"title": "Gladiador", "song": "Now We Are Free", "artist": "Hans Zimmer", "year": "2000", "search_query": "Gladiator Now We Are Free Hans Zimmer", "forbidden_words": ["Roma", "Coliseo", "Máximo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/08/1c/62/081c6242-de2e-80ef-d1d6-51c21620fbf1/mzaf_8911425336835289037.plus.aac.p.m4a"}, {"title": "La Lista de Schindler", "song": "Theme from Schindler's List", "artist": "John Williams", "year": "1993", "search_query": "Schindler's List Theme John Williams", "forbidden_words": ["Holocausto", "Lista", "Alemania"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/87/66/5f/87665fc0-803f-a5a9-e2c8-1650fa8d2971/mzaf_2983154669099044974.plus.aac.p.m4a"}, {"title": "La La Land", "song": "City of Stars", "artist": "Ryan Gosling & Emma Stone", "year": "2016", "search_query": "La La Land City of Stars Ryan Gosling", "forbidden_words": ["Jazz", "Piano", "Emma Stone"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/07/1b/17/071b1716-5a3f-9883-ad1c-426e531a3df3/mzaf_3825775767124502166.plus.aac.p.m4a"}, {"title": "Rocky", "song": "Gonna Fly Now", "artist": "Bill Conti", "year": "1976", "search_query": "Rocky Gonna Fly Now Bill Conti", "forbidden_words": ["Boxeo", "Balboa", "Filadelfia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ea/02/6d/ea026df4-5a5d-f6a0-c526-2a9958c4c22a/mzaf_6885755452086543650.plus.aac.p.m4a"}, {"title": "Fiebre de Sábado por la Noche", "song": "Stayin' Alive", "artist": "Bee Gees", "year": "1977", "search_query": "Saturday Night Fever Stayin Alive Bee Gees", "forbidden_words": ["Disco", "Travolta", "Baile"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/36/ed/d6/36edd6a5-2093-3aea-43f3-318f2b75373b/mzaf_14646237435212422067.plus.aac.p.m4a"}, {"title": "Psicosis", "song": "The Murder (Shower Scene)", "artist": "Bernard Herrmann", "year": "1960", "search_query": "Psycho Shower Scene Bernard Herrmann", "forbidden_words": ["Ducha", "Motel", "Cuchillo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0f/20/ea/0f20eacc-9577-2856-9c9d-9a7ba45ee331/mzaf_16075457857588971421.plus.aac.p.m4a"}, {"title": "El Bueno, el Malo y el Feo", "song": "The Good, the Bad and the Ugly", "artist": "Ennio Morricone", "year": "1966", "search_query": "The Good the Bad and the Ugly Ennio Morricone", "forbidden_words": ["Oeste", "Desierto", "Pistola"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b0/99/86/b09986f5-ef2c-801f-ec3a-f6f2e7189826/mzaf_9640375822381239964.plus.aac.p.m4a"}, {"title": "Tiburón", "song": "Main Title (Jaws)", "artist": "John Williams", "year": "1975", "search_query": "Jaws Main Title John Williams", "forbidden_words": ["Playas", "Dientes", "Océano"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ab/67/f4/ab67f441-b14f-1902-f353-4100c6e932aa/mzaf_4470349713199856556.plus.aac.p.m4a"}, {"title": "Casablanca", "song": "As Time Goes By", "artist": "Frank Sinatra", "year": "1942", "search_query": "Casablanca As Time Goes By Frank Sinatra", "forbidden_words": ["Francia", "Piano", "Siempre"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c1/b0/6e/c1b06ec4-125f-a61b-7b5d-be9aa5706113/mzaf_13027097327400552604.plus.aac.p.m4a"}, {"title": "La Vida es Bella", "song": "La Vita è Bella", "artist": "Nicola Piovani", "year": "1997", "search_query": "La Vita e Bella Nicola Piovani", "forbidden_words": ["Italia", "Campo", "Juego"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8f/10/68/8f106897-8aa5-a017-cb4c-eb4ec0dd68b9/mzaf_10821208425846764898.plus.aac.p.m4a"}, {"title": "Cinema Paradiso", "song": "Love Theme", "artist": "Ennio Morricone", "year": "1988", "search_query": "Cinema Paradiso Love Theme Ennio Morricone", "forbidden_words": ["Cine", "Proyector", "Sicilia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a9/22/40/a922406c-16ee-82e7-1c02-a7af4f8bdfcf/mzaf_1492557100730535064.plus.aac.p.m4a"}, {"title": "Forrest Gump", "song": "Feather Theme", "artist": "Alan Silvestri", "year": "1994", "search_query": "Forrest Gump Feather Theme Alan Silvestri", "forbidden_words": ["Correr", "Bombones", "Chocolates"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5d/0a/08/5d0a08cf-87d4-9035-5005-d79cac1f5e3e/mzaf_15866539636703193554.plus.aac.p.m4a"}, {"title": "Armagedón", "song": "I Don't Want to Miss a Thing", "artist": "Aerosmith", "year": "1998", "search_query": "Armageddon I Dont Want to Miss a Thing Aerosmith", "forbidden_words": ["Asteroide", "Bruce Willis", "Espacio"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/95/8c/ac/958cace7-ed1e-724f-5f46-b0d673c739f6/mzaf_4646028621824909013.plus.aac.p.m4a"}, {"title": "Mamma Mia!", "song": "Mamma Mia", "artist": "ABBA", "year": "2008", "search_query": "Mamma Mia ABBA", "forbidden_words": ["Grecia", "Padre", "Boda"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6d/fb/45/6dfb4566-70c7-5f5f-a497-3f8343af3920/mzaf_13401569128113882548.plus.aac.p.m4a"}, {"title": "Grease", "song": "You're the One That I Want", "artist": "John Travolta & Olivia Newton-John", "year": "1978", "search_query": "Grease You're the One That I Want John Travolta", "forbidden_words": ["Escuela", "Autos", "Chaqueta"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f0/c9/3a/f0c93aff-230f-a7f6-d1b6-37ebcc02d62c/mzaf_5514414658492873704.plus.aac.p.m4a"}, {"title": "Nace una Estrella", "song": "Shallow", "artist": "Lady Gaga & Bradley Cooper", "year": "2018", "search_query": "A Star Is Born Shallow Lady Gaga", "forbidden_words": ["Cantante", "Guitarra", "Concierto"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f8/2e/59/f82e59a0-d9fd-ce17-c568-5eb34b2f27f5/mzaf_5435765717490772642.plus.aac.p.m4a"}, {"title": "El Gran Showman", "song": "This Is Me", "artist": "Keala Settle", "year": "2017", "search_query": "The Greatest Showman This Is Me", "forbidden_words": ["Circo", "Barnum", "Espectáculo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/19/14/ef/1914efd4-057f-db2c-1959-0a064ae3f3df/mzaf_14670696818387595514.plus.aac.p.m4a"}, {"title": "Slumdog Millionaire", "song": "Jai Ho", "artist": "A.R. Rahman", "year": "2008", "search_query": "Slumdog Millionaire Jai Ho AR Rahman", "forbidden_words": ["India", "Preguntas", "Millonario"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/90/f0/0c/90f00c66-4cd0-bb6f-c4e0-972bbec388f9/mzaf_2694158803288302609.plus.aac.p.m4a"}, {"title": "Sonrisas y Lágrimas", "song": "Do-Re-Mi", "artist": "Julie Andrews", "year": "1965", "search_query": "The Sound of Music Do Re Mi Julie Andrews", "forbidden_words": ["Monja", "Familia", "Austria"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/22/96/01/2296010e-0dad-69a5-0f2b-a89556ec6f72/mzaf_7947295163722150528.plus.aac.p.m4a"}, {"title": "8 Mile", "song": "Lose Yourself", "artist": "Eminem", "year": "2002", "search_query": "8 Mile Lose Yourself Eminem", "forbidden_words": ["Rap", "Detroit", "Batalla"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/13/5a/61/135a6154-8ca2-0523-1fa2-f4ac0ea9e1e7/mzaf_13242749689945681184.plus.aac.p.m4a"}, {"title": "Footloose", "song": "Footloose", "artist": "Kenny Loggins", "year": "1984", "search_query": "Footloose Kenny Loggins", "forbidden_words": ["Bailar", "Prohibido", "Pueblo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/22/18/68/2218688a-ff36-7277-56de-c6b221d691c8/mzaf_12250270063124855744.plus.aac.p.m4a"}, {"title": "Ghost: La Sombra del Amor", "song": "Unchained Melody", "artist": "The Righteous Brothers", "year": "1990", "search_query": "Ghost Unchained Melody Righteous Brothers", "forbidden_words": ["Fantasma", "Barro", "Cerámica"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c9/b9/41/c9b94165-8481-5265-c739-728e5cc18105/mzaf_11027897680406162531.plus.aac.p.m4a"}, {"title": "Amadeus", "song": "Lacrimosa", "artist": "Mozart", "year": "1984", "search_query": "Amadeus Lacrimosa Mozart", "forbidden_words": ["Compositor", "Salieri", "Ópera"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/86/1e/0f/861e0f43-8626-3d4f-10f9-9e714f09006f/mzaf_10906869285380827889.plus.aac.p.m4a"}, {"title": "Star Wars", "song": "Main Title / Imperial March", "artist": "John Williams", "year": "1977", "search_query": "Star Wars Main Title John Williams", "forbidden_words": ["Darth Vader", "Jedi", "Galaxia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/22/70/d3/2270d3e9-b58f-5211-b096-dd32426144c1/mzaf_1330954041442566776.plus.aac.p.m4a"}, {"title": "Harry Potter", "song": "Hedwig's Theme", "artist": "John Williams", "year": "2001", "search_query": "Harry Potter Hedwig Theme John Williams", "forbidden_words": ["Magia", "Hogwarts", "Varita"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/81/ee/ae/81eeae0a-da63-1fc7-42c1-21b498b85de8/mzaf_13621452881875123588.plus.aac.p.m4a"}, {"title": "El Señor de los Anillos", "song": "Concerning Hobbits", "artist": "Howard Shore", "year": "2001", "search_query": "The Lord of the Rings Concerning Hobbits Howard Shore", "forbidden_words": ["Anillo", "Frodo", "Mordor"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cd/1e/2c/cd1e2c74-a074-aa60-ec24-8abee7dcec43/mzaf_12399500222028997548.plus.aac.p.m4a"}, {"title": "Los Vengadores", "song": "The Avengers Main Theme", "artist": "Alan Silvestri", "year": "2012", "search_query": "The Avengers Main Title Alan Silvestri", "forbidden_words": ["Thanos", "Marvel", "Superhéroes"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bf/a7/9f/bfa79f79-b635-0f8c-d72f-e59db79108af/mzaf_9009025771638181825.plus.aac.p.m4a"}, {"title": "Pantera Negra", "song": "All the Stars", "artist": "Kendrick Lamar & SZA", "year": "2018", "search_query": "Black Panther All the Stars Kendrick Lamar", "forbidden_words": ["Wakanda", "Rey", "Vibranium"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5f/c3/17/5fc31767-8c31-128b-920e-f0f734bc2ac5/mzaf_3600375740601988513.plus.aac.p.m4a"}, {"title": "Guardianes de la Galaxia", "song": "Hooked on a Feeling", "artist": "Blue Swede", "year": "2014", "search_query": "Guardians of the Galaxy Hooked on a Feeling", "forbidden_words": ["Groot", "Casete", "Mapache"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d3/6c/64/d36c6420-21f8-9e2d-9170-1eda13209617/mzaf_7003972075215037414.plus.aac.p.m4a"}, {"title": "Batman: El Caballero de la Noche", "song": "Why So Serious?", "artist": "Hans Zimmer", "year": "2008", "search_query": "The Dark Knight Why So Serious Hans Zimmer", "forbidden_words": ["Guasón", "Joker", "Ciudad Gótica"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/97/98/5d/97985da8-5a50-bf01-ad64-3387d26ef2f7/mzaf_1097861028012296191.plus.aac.p.m4a"}, {"title": "Misión Imposible", "song": "Theme from Mission: Impossible", "artist": "Lalo Schifrin", "year": "1996", "search_query": "Mission Impossible Theme Lalo Schifrin", "forbidden_words": ["Tom Cruise", "Agente", "Máscara"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/17/6a/b9/176ab927-87f9-0a19-8484-260f711fb394/mzaf_3145715186897362042.plus.aac.p.m4a"}, {"title": "007: Skyfall", "song": "Skyfall", "artist": "Adele", "year": "2012", "search_query": "Skyfall Adele 007", "forbidden_words": ["James Bond", "Espía", "Licencia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6c/48/0e/6c480edc-89f5-a9cf-b309-63c5237efe92/mzaf_3142604484249449871.plus.aac.p.m4a"}, {"title": "Jurassic Park", "song": "Theme from Jurassic Park", "artist": "John Williams", "year": "1993", "search_query": "Jurassic Park Theme John Williams", "forbidden_words": ["Dinosaurio", "T-Rex", "Isla"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/45/0c/30/450c30bc-c7c9-6ceb-352a-a78c4304eebf/mzaf_6333901715385654004.plus.aac.p.m4a"}, {"title": "Volver al Futuro", "song": "Back to the Future Theme", "artist": "Alan Silvestri", "year": "1985", "search_query": "Back to the Future Main Title Alan Silvestri", "forbidden_words": ["DeLorean", "Marty", "Doc"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4e/c4/1c/4ec41ceb-e46a-a896-67c8-a2c08fa6c926/mzaf_906025227683505700.plus.aac.p.m4a"}, {"title": "Indiana Jones", "song": "The Raiders March", "artist": "John Williams", "year": "1981", "search_query": "Indiana Jones The Raiders March John Williams", "forbidden_words": ["Látigo", "Sombrero", "Arqueólogo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3c/d5/1d/3cd51d95-0ee5-f5fe-ced2-12d8a854361b/mzaf_2431570209513524121.plus.aac.p.m4a"}, {"title": "El Origen (Inception)", "song": "Time", "artist": "Hans Zimmer", "year": "2010", "search_query": "Inception Time Hans Zimmer", "forbidden_words": ["Sueños", "Trompo", "DiCaprio"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e0/1d/a4/e01da4a2-a75f-7ebf-9971-3d49e17efc57/mzaf_10500078769097048384.plus.aac.p.m4a"}, {"title": "Matrix", "song": "Clubbed to Death", "artist": "Rob Dougan", "year": "1999", "search_query": "Matrix Clubbed to Death Rob Dougan", "forbidden_words": ["Pastilla", "Neo", "Simulación"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cc/81/ab/cc81ab1f-978b-e170-b773-3d2ec5cb6043/mzaf_6735656694933035279.plus.aac.p.m4a"}, {"title": "Piratas del Caribe", "song": "He's a Pirate", "artist": "Hans Zimmer", "year": "2003", "search_query": "Pirates of the Caribbean He's a Pirate Hans Zimmer", "forbidden_words": ["Jack Sparrow", "Barco", "Isla"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0d/21/07/0d2107c4-573b-6649-229e-e715501010cc/mzaf_8361386078907471110.plus.aac.p.m4a"}, {"title": "Spider-Man: Into the Spider-Verse", "song": "Sunflower", "artist": "Post Malone & Swae Lee", "year": "2018", "search_query": "Spider-Verse Sunflower Post Malone", "forbidden_words": ["Telaraña", "Miles Morales", "Multiverso"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/98/f0/d6/98f0d67e-f8bf-762d-cac7-1c6b3b6b35dd/mzaf_4543283896248560946.plus.aac.p.m4a"}, {"title": "Iron Man", "song": "Back in Black", "artist": "AC/DC", "year": "2008", "search_query": "Iron Man Back in Black ACDC", "forbidden_words": ["Tony Stark", "Armadura", "Marvel"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/08/2e/ac/082eac8c-1d0e-f72f-7b37-b8e037ff1579/mzaf_7587164327744022409.plus.aac.p.m4a"}, {"title": "Top Gun", "song": "Danger Zone", "artist": "Kenny Loggins", "year": "1986", "search_query": "Top Gun Danger Zone Kenny Loggins", "forbidden_words": ["Piloto", "Avión", "Tom Cruise"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8d/c8/19/8dc81935-5620-0b29-3f4c-acc3f6479796/mzaf_14998514993249023640.plus.aac.p.m4a"}, {"title": "Cazafantasmas", "song": "Ghostbusters", "artist": "Ray Parker Jr.", "year": "1984", "search_query": "Ghostbusters Ray Parker Jr", "forbidden_words": ["Fantasmas", "Moco", "Auto"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/63/8b/e3/638be3a1-2f5e-5cff-9b58-085e3b793cbd/mzaf_10733010531783613784.plus.aac.p.m4a"}, {"title": "Rápidos y Furiosos 7", "song": "See You Again", "artist": "Wiz Khalifa & Charlie Puth", "year": "2015", "search_query": "Fast and Furious 7 See You Again Wiz Khalifa", "forbidden_words": ["Autos", "Familia", "Carreras"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1a/56/6c/1a566cbc-16ea-708b-5bad-e576598fd134/mzaf_6353919847010163362.plus.aac.p.m4a"}, {"title": "Superman", "song": "Main Title (Superman)", "artist": "John Williams", "year": "1978", "search_query": "Superman Main Title John Williams", "forbidden_words": ["Capa", "Kryptonita", "Krypton"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e3/e1/fd/e3e1fdec-3483-fb83-3041-d01577fd1415/mzaf_13690916780854407664.plus.aac.p.m4a"}, {"title": "Terminator 2", "song": "Main Title (Terminator)", "artist": "Brad Fiedel", "year": "1991", "search_query": "Terminator 2 Main Title Brad Fiedel", "forbidden_words": ["Robot", "Futuro", "Schwarzenegger"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f3/83/ba/f383baaa-eac4-c630-e91b-2ae649f640bc/mzaf_12668565942234754287.plus.aac.p.m4a"}, {"title": "Tron: Legacy", "song": "Derezzed", "artist": "Daft Punk", "year": "2010", "search_query": "Tron Legacy Derezzed Daft Punk", "forbidden_words": ["Videojuego", "Motos", "Neón"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b0/31/b2/b031b227-88da-3dee-05fe-520b96f30285/mzaf_8299314304356888270.plus.aac.p.m4a"}, {"title": "Dune", "song": "Paul's Dream", "artist": "Hans Zimmer", "year": "2021", "search_query": "Dune Paul's Dream Hans Zimmer", "forbidden_words": ["Desierto", "Gusano", "Especia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9f/5e/3d/9f5e3da8-e698-31b3-c4e4-5964df457951/mzaf_11074540054311181787.plus.aac.p.m4a"}, {"title": "Mad Max: Fury Road", "song": "Brothers In Arms", "artist": "Junkie XL", "year": "2015", "search_query": "Mad Max Fury Road Brothers In Arms Junkie XL", "forbidden_words": ["Camión", "Desierto", "Guitarra"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/34/68/89/3468897a-5b02-5779-3e4c-f4280d7cbf1f/mzaf_7053927198605704346.plus.aac.p.m4a"}, {"title": "El Rey León", "song": "Circle of Life / Hakuna Matata", "artist": "Elton John", "year": "1994", "search_query": "The Lion King Circle of Life Elton John", "forbidden_words": ["Simba", "Mufasa", "Sabana"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3f/be/3a/3fbe3ae4-6bdf-3ab5-b1fc-c64ed09f295f/mzaf_14415717605075682462.plus.aac.p.m4a"}, {"title": "Frozen", "song": "Let It Go", "artist": "Idina Menzel", "year": "2013", "search_query": "Frozen Let It Go Idina Menzel", "forbidden_words": ["Hielo", "Elsa", "Olaf"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6c/4e/be/6c4ebef9-901d-e32f-c770-cf26ee589179/mzaf_7585957285423980495.plus.aac.p.m4a"}, {"title": "Coco", "song": "Recuérdame (Remember Me)", "artist": "Carlos Rivera", "year": "2017", "search_query": "Coco Recuérdame Remember Me", "forbidden_words": ["México", "Guitarra", "Muertos"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4b/58/15/4b5815fd-a6ef-d9c4-81f2-9a69cd211281/mzaf_16169343320647003292.plus.aac.p.m4a"}, {"title": "Aladdín", "song": "A Whole New World", "artist": "Brad Kane & Lea Salonga", "year": "1992", "search_query": "Aladdin A Whole New World", "forbidden_words": ["Genio", "Lámpara", "Alfombra"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7e/50/22/7e5022ce-974d-8a47-efda-efe789cd206c/mzaf_16690203909300285497.plus.aac.p.m4a"}, {"title": "La Sirenita", "song": "Under the Sea", "artist": "Samuel E. Wright", "year": "1989", "search_query": "The Little Mermaid Under the Sea", "forbidden_words": ["Ariel", "Cangrejo", "Mar"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9e/ba/96/9eba96d0-e2a6-e674-e457-d9521b3a089c/mzaf_14998204985578747107.plus.aac.p.m4a"}, {"title": "Toy Story", "song": "You've Got a Friend in Me", "artist": "Randy Newman", "year": "1995", "search_query": "Toy Story You've Got a Friend in Me Randy Newman", "forbidden_words": ["Woody", "Buzz", "Juguetes"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/74/33/7d/74337de2-3b51-db2e-3f46-2b4159212c89/mzaf_1795543695107107317.plus.aac.p.m4a"}, {"title": "Moana", "song": "How Far I'll Go", "artist": "Auli'i Cravalho", "year": "2016", "search_query": "Moana How Far I'll Go Auli'i Cravalho", "forbidden_words": ["Océano", "Isla", "Maui"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f0/83/9f/f0839f4e-61e3-a819-8959-9ee734454e35/mzaf_16552276917425095079.plus.aac.p.m4a"}, {"title": "Encanto", "song": "We Don't Talk About Bruno", "artist": "Encanto Cast", "year": "2021", "search_query": "Encanto We Don't Talk About Bruno", "forbidden_words": ["Colombia", "Mirabel", "Familia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/55/0a/76/550a76f2-cf9c-3e07-8b9c-5c210e73af44/mzaf_13858819433882654714.plus.aac.p.m4a"}, {"title": "La Bella y la Bestia", "song": "Beauty and the Beast", "artist": "Celine Dion & Peabo Bryson", "year": "1991", "search_query": "Beauty and the Beast Celine Dion", "forbidden_words": ["Rosa", "Castillo", "Vajilla"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/cb/75/99/cb7599f5-3fc5-de23-ad2c-766a0b744ad9/mzaf_12426634965966306100.plus.aac.p.m4a"}, {"title": "Shrek", "song": "All Star", "artist": "Smash Mouth", "year": "2001", "search_query": "Shrek All Star Smash Mouth", "forbidden_words": ["Ogro", "Burro", "Pantano"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b0/03/ef/b003ef4c-1a22-6b15-e851-fb106ad96a3b/mzaf_3320656447657988367.plus.aac.p.m4a"}, {"title": "Los Increíbles", "song": "The Incredibles Theme", "artist": "Michael Giacchino", "year": "2004", "search_query": "The Incredibles Main Theme Michael Giacchino", "forbidden_words": ["Traje", "Familia", "Superhéroes"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview19/v4/11/ba/bf/11babfe5-04e4-2f70-35df-0ae632970232/mzaf_7515257914147830324.plus.aac.p.m4a"}, {"title": "Mulan", "song": "I'll Make a Man Out of You", "artist": "Donny Osmond", "year": "1998", "search_query": "Mulan I'll Make a Man Out of You", "forbidden_words": ["China", "Dragón", "Ejército"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/32/d8/eb/32d8eb29-f588-d44e-dc1b-7345f36407d5/mzaf_3448078749027880676.plus.aac.p.m4a"}, {"title": "Tarzán", "song": "You'll Be in My Heart", "artist": "Phil Collins", "year": "1999", "search_query": "Tarzan You'll Be in My Heart Phil Collins", "forbidden_words": ["Selva", "Monos", "Gorila"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/08/fc/47/08fc476e-a468-6d99-7a38-10dd069438ad/mzaf_9160167947158091816.plus.aac.p.m4a"}, {"title": "Hércules", "song": "Go the Distance", "artist": "Michael English", "year": "1997", "search_query": "Hercules Go the Distance", "forbidden_words": ["Grecia", "Dios", "Olimpo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ae/e0/0d/aee00de0-4c5c-f854-b8a5-4d9496181e2e/mzaf_13468286191233087315.plus.aac.p.m4a"}, {"title": "Up: Una Aventura de Altura", "song": "Married Life", "artist": "Michael Giacchino", "year": "2009", "search_query": "Up Married Life Michael Giacchino", "forbidden_words": ["Globos", "Casa", "Anciano"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/70/d5/7a/70d57aab-e4fa-1dc0-a58f-9357e38c567b/mzaf_14650083088179348809.plus.aac.p.m4a"}, {"title": "Monsters, Inc.", "song": "If I Didn't Have You", "artist": "Randy Newman", "year": "2001", "search_query": "Monsters Inc If I Didn't Have You", "forbidden_words": ["Sully", "Mike", "Puertas"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1b/66/0a/1b660a48-fcbc-35c2-6744-062bf8af3644/mzaf_6568015295826639479.plus.aac.p.m4a"}, {"title": "Buscando a Nemo", "song": "Nemo Egg", "artist": "Thomas Newman", "year": "2003", "search_query": "Finding Nemo Nemo Egg Thomas Newman", "forbidden_words": ["Pez", "Dory", "Anémona"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c8/0d/04/c80d047e-ff4e-0bfc-dda6-0a78bb86f4c8/mzaf_3827475213021293644.plus.aac.p.m4a"}, {"title": "Spider-Man: Across the Spider-Verse", "song": "Am I Dreaming", "artist": "Metro Boomin", "year": "2023", "search_query": "Across the Spider-Verse Am I Dreaming Metro Boomin", "forbidden_words": ["Multiverso", "Gwen", "Miles"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/10/83/4f/10834fcf-1bc6-46e9-1bbe-4e4dfaf997c3/mzaf_11588678333799017051.plus.aac.p.m4a"}, {"title": "Mi Villano Favorito 2", "song": "Happy", "artist": "Pharrell Williams", "year": "2013", "search_query": "Despicable Me 2 Happy Pharrell Williams", "forbidden_words": ["Minions", "Gru", "Banana"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ed/a0/19/eda019cf-2794-66d1-208d-2e2e74c26c3d/mzaf_16469762943852039623.plus.aac.p.m4a"}, {"title": "Madagascar", "song": "I Like to Move It", "artist": "Real 2 Reel", "year": "2005", "search_query": "Madagascar I Like to Move It", "forbidden_words": ["Zoológico", "Lémur", "Pingüinos"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f9/49/d3/f949d3e6-e850-8474-5e6c-93b3de4792f8/mzaf_13594316837483549820.plus.aac.p.m4a"}, {"title": "El Extraño Mundo de Jack", "song": "This Is Halloween", "artist": "Danny Elfman", "year": "1993", "search_query": "The Nightmare Before Christmas This Is Halloween", "forbidden_words": ["Calabaza", "Navidad", "Halloween"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/10/32/35/103235a0-4c6a-4eb2-acb3-f87086143048/mzaf_13228789195537957728.plus.aac.p.m4a"}, {"title": "Kung Fu Panda", "song": "Oogway Ascends", "artist": "Hans Zimmer", "year": "2008", "search_query": "Kung Fu Panda Oogway Ascends Hans Zimmer", "forbidden_words": ["Panda", "Fideos", "Dragón"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a3/c3/33/a3c3330f-ac8c-3daa-2af9-7117878b15f6/mzaf_3960137280610359666.plus.aac.p.m4a"}, {"title": "Cómo Entrenar a Tu Dragón", "song": "Test Drive", "artist": "John Powell", "year": "2010", "search_query": "How to Train Your Dragon Test Drive John Powell", "forbidden_words": ["Vikingos", "Chimuelo", "Volar"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/80/f0/ef/80f0ef8e-8c55-20ce-df1e-dbbfb8aeba2e/mzaf_10980820564622501759.plus.aac.p.m4a"}, {"title": "Super Mario Bros. La Película", "song": "Peaches", "artist": "Jack Black", "year": "2023", "search_query": "Super Mario Bros Peaches Jack Black", "forbidden_words": ["Bowser", "Princesa", "Fontanero"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/35/88/55/358855a2-410f-c6bf-0f15-0f60ef4961a7/mzaf_17527717735876417165.plus.aac.p.m4a"}, {"title": "Anastasia", "song": "Once Upon a December", "artist": "Liz Callaway", "year": "1997", "search_query": "Anastasia Once Upon a December", "forbidden_words": ["Rusia", "Palacio", "Princesa"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/17/be/dd/17bedd62-c41b-1186-aaaf-8c11915ea20f/mzaf_3472923010010866899.plus.aac.p.m4a"}, {"title": "Pulp Fiction", "song": "Misirlou", "artist": "Dick Dale", "year": "1994", "search_query": "Pulp Fiction Misirlou Dick Dale", "forbidden_words": ["Tarantino", "Travolta", "Maletín"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/1a/83/dd/1a83ddfb-94aa-1d03-919f-4a874f119cc7/mzaf_5919605644810865544.plus.aac.p.m4a"}, {"title": "E.T. el Extraterrestre", "song": "Flying Theme", "artist": "John Williams", "year": "1982", "search_query": "E.T. Flying Theme John Williams", "forbidden_words": ["Alien", "Bicicleta", "Dedo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/85/61/fd/8561fd78-4349-ede6-d633-50c146ffa43b/mzaf_15209395579821267615.plus.aac.p.m4a"}, {"title": "El Club de la Pelea", "song": "Where Is My Mind?", "artist": "Pixies", "year": "1999", "search_query": "Fight Club Where Is My Mind Pixies", "forbidden_words": ["Jabón", "Brad Pitt", "Regla"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fe/03/d0/fe03d057-de23-fd05-cff8-f0ae5eb1cb99/mzaf_18018835550092786771.plus.aac.p.m4a"}, {"title": "Trainspotting", "song": "Born Slippy", "artist": "Underworld", "year": "1996", "search_query": "Trainspotting Born Slippy Underworld", "forbidden_words": ["Escocia", "Drogas", "Drogas"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/55/7b/2d/557b2df8-3592-e1d3-5e49-12fa0c80cf82/mzaf_17812663078551126252.plus.aac.p.m4a"}, {"title": "Kill Bill: Vol. 1", "song": "Battle Without Honor or Humanity", "artist": "Tomoyasu Hotei", "year": "2003", "search_query": "Kill Bill Battle Without Honor or Humanity", "forbidden_words": ["Katana", "Amarillo", "Novia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d5/5d/21/d55d217f-ab26-edb3-4de6-d4abfa4d35d0/mzaf_6381978764870091182.plus.aac.p.m4a"}, {"title": "Space Jam", "song": "Space Jam Theme", "artist": "Quad City DJ's", "year": "1996", "search_query": "Space Jam Quad City DJs", "forbidden_words": ["Básquetbol", "Michael Jordan", "Bugs Bunny"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5c/7a/93/5c7a9372-62af-23b8-e8d0-f7e82dd3875a/mzaf_50452743001158593.plus.aac.p.m4a"}, {"title": "Hombres de Negro", "song": "Men in Black", "artist": "Will Smith", "year": "1997", "search_query": "Men in Black Will Smith", "forbidden_words": ["Aliens", "Gafas", "Traje"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/df/76/60/df7660a8-6330-d384-2df7-c3ac9566bd8c/mzaf_5968128030680647840.plus.aac.p.m4a"}, {"title": "Dirty Dancing", "song": "(I've Had) The Time of My Life", "artist": "Bill Medley & Jennifer Warnes", "year": "1987", "search_query": "Dirty Dancing The Time of My Life", "forbidden_words": ["Baile", "Hotel", "Salto"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/41/f3/49/41f34968-bfb6-7253-58f6-e2d56b0e0979/mzaf_6987448208011331365.plus.aac.p.m4a"}, {"title": "Pretty Woman", "song": "Oh, Pretty Woman", "artist": "Roy Orbison", "year": "1990", "search_query": "Pretty Woman Roy Orbison", "forbidden_words": ["Compras", "Hotel", "Richard Gere"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bc/45/c5/bc45c5e4-61d9-8074-df34-6117fb8146c2/mzaf_17905078581365919431.plus.aac.p.m4a"}, {"title": "El Profesional (Léon)", "song": "Shape of My Heart", "artist": "Sting", "year": "1994", "search_query": "Leon The Professional Shape of My Heart Sting", "forbidden_words": ["Planta", "Asesino", "Niña"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/86/83/04/868304d7-b59b-1875-9473-0bb8fff64535/mzaf_1168376021829476583.plus.aac.p.m4a"}, {"title": "Drive", "song": "Nightcall", "artist": "Kavinsky", "year": "2011", "search_query": "Drive Nightcall Kavinsky", "forbidden_words": ["Auto", "Chaqueta", "Guantes"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d2/45/fb/d245fbf9-8570-fdc0-5e6b-aa528c130486/mzaf_11947081694159530687.plus.aac.p.m4a"}, {"title": "Réquiem por un Sueño", "song": "Lux Aeterna", "artist": "Clint Mansell", "year": "2000", "search_query": "Requiem for a Dream Lux Aeterna Clint Mansell", "forbidden_words": ["Televisión", "Adicción", "Música"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1b/13/b2/1b13b2a1-7016-e6cd-4dc0-0fecbd813707/mzaf_7355488807291141457.plus.aac.p.m4a"}, {"title": "La Naranja Mecánica", "song": "Funeral of Queen Mary", "artist": "Wendy Carlos", "year": "1971", "search_query": "A Clockwork Orange Funeral of Queen Mary", "forbidden_words": ["Sombrero", "Leche", "Violencia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/51/fb/f1/51fbf1db-5cec-3294-91c1-303975e6dd6f/mzaf_6738625069934127509.plus.aac.p.m4a"}, {"title": "Apocalypse Now", "song": "Ride of the Valkyries", "artist": "Wagner", "year": "1979", "search_query": "Apocalypse Now Ride of the Valkyries Wagner", "forbidden_words": ["Helicópteros", "Vietnam", "Río"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/df/85/00/df850044-648c-e630-58e2-29e50760cc91/mzaf_4401785502336607250.plus.aac.p.m4a"}, {"title": "El Quinto Elemento", "song": "The Diva Dance", "artist": "Inva Mula", "year": "1997", "search_query": "The Fifth Element The Diva Dance", "forbidden_words": ["Azul", "Ópera", "Piedras"], "audio_url": ""}, {"title": "Beetlejuice", "song": "Day-O (Banana Boat Song)", "artist": "Harry Belafonte", "year": "1988", "search_query": "Beetlejuice Day-O Harry Belafonte", "forbidden_words": ["Fantasma", "Tres Veces", "Cena"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a1/1a/dc/a11adc95-4bc3-a71f-d678-d64b8cd8a8aa/mzaf_17378642947492284445.plus.aac.p.m4a"}, {"title": "Flashdance", "song": "Flashdance... What a Feeling", "artist": "Irene Cara", "year": "1983", "search_query": "Flashdance What a Feeling Irene Cara", "forbidden_words": ["Agua", "Silla", "Baile"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ee/f0/fd/eef0fda5-3a77-ba9a-41e1-31e0fe603faa/mzaf_4287430643698303778.plus.aac.p.m4a"}, {"title": "Escuela de Rock", "song": "School of Rock Theme", "artist": "Jack Black", "year": "2003", "search_query": "School of Rock Jack Black", "forbidden_words": ["Profesor", "Guitarra", "Banda"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a7/98/a4/a798a4a2-dc88-1dcc-8afa-c14998734b1c/mzaf_8383293445281438560.plus.aac.p.m4a"}, {"title": "Bohemian Rhapsody", "song": "Bohemian Rhapsody", "artist": "Queen", "year": "2018", "search_query": "Bohemian Rhapsody Queen", "forbidden_words": ["Freddie", "Concierto", "Bigote"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/15/91/df/1591df73-dd8a-ee42-bfb8-51c8cdda7078/mzaf_9819305553372065518.plus.aac.p.m4a"}, {"title": "Rocketman", "song": "Tiny Dancer", "artist": "Elton John", "year": "2019", "search_query": "Rocketman Tiny Dancer Elton John", "forbidden_words": ["Piano", "Gafas", "Vestuario"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/01/5f/bc/015fbcbc-7791-5102-9a76-6d6648f362b0/mzaf_6818294948067833285.plus.aac.p.m4a"}, {"title": "Barbie", "song": "Dance the Night / I'm Just Ken", "artist": "Dua Lipa & Ryan Gosling", "year": "2023", "search_query": "Barbie Dance the Night Dua Lipa", "forbidden_words": ["Rosa", "Muñeca", "Ken"], "audio_url": ""}, {"title": "Oppenheimer", "song": "Can You Hear The Music", "artist": "Ludwig Göransson", "year": "2023", "search_query": "Oppenheimer Can You Hear The Music Ludwig Goransson", "forbidden_words": ["Bomba", "Átomo", "Física"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0d/b0/b8/0db0b839-4fbc-2bb6-e280-3c9dc1302cf2/mzaf_12466660795519790459.plus.aac.p.m4a"}, {"title": "El Graduado", "song": "The Sound of Silence", "artist": "Simon & Garfunkel", "year": "1967", "search_query": "The Graduate The Sound of Silence Simon Garfunkel", "forbidden_words": ["Piscina", "Iglesia", "Boda"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/93/1b/e3/931be3d5-2d92-30ba-e654-ee4c13f50f19/mzaf_16135248673165047798.plus.aac.p.m4a"}, {"title": "Amélie", "song": "La Valse d'Amélie", "artist": "Yann Tiersen", "year": "2001", "search_query": "Amelie La Valse d'Amelie Yann Tiersen", "forbidden_words": ["París", "Fotomatón", "Duende"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5c/67/f0/5c67f02a-f50e-b677-dc06-5516fe9b1f5b/mzaf_3393553286202948128.plus.aac.p.m4a"}, {"title": "Interstellar", "song": "First Step / Cornfield Chase", "artist": "Hans Zimmer", "year": "2014", "search_query": "Interstellar First Step Hans Zimmer", "forbidden_words": ["Espacio", "Reloj", "Agujero"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3a/ee/23/3aee2300-f6f7-a006-e20f-28092e814cbe/mzaf_1624587954644600228.plus.aac.p.m4a"}];
+        const PELICULAS = [{"title": "Titanic", "song": "My Heart Will Go On", "artist": "Celine Dion", "year": "1997", "search_query": "Titanic My Heart Will Go On Celine Dion", "forbidden_words": ["Barco", "Iceberg", "DiCaprio"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/54/5b/f7/545bf75d-1ea1-07f0-0c4e-a6d3bca7c092/mzaf_1410328638164863411.plus.aac.p.m4a"}, {"title": "El Padrino", "song": "Main Title / Speak Softly Love", "artist": "Nino Rota", "year": "1972", "search_query": "The Godfather Main Title Nino Rota", "forbidden_words": ["Mafia", "Corleone", "Oferta"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/5c/a6/76/5ca676fc-00ea-625b-aa23-ca8123edd306/mzaf_3787288201455456673.plus.aac.p.m4a"}, {"title": "Gladiador", "song": "Now We Are Free", "artist": "Hans Zimmer", "year": "2000", "search_query": "Gladiator Now We Are Free Hans Zimmer", "forbidden_words": ["Roma", "Coliseo", "Máximo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/08/1c/62/081c6242-de2e-80ef-d1d6-51c21620fbf1/mzaf_8911425336835289037.plus.aac.p.m4a"}, {"title": "La Lista de Schindler", "song": "Theme from Schindler's List", "artist": "John Williams", "year": "1993", "search_query": "Schindler's List Theme John Williams", "forbidden_words": ["Holocausto", "Lista", "Alemania"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/87/66/5f/87665fc0-803f-a5a9-e2c8-1650fa8d2971/mzaf_2983154669099044974.plus.aac.p.m4a"}, {"title": "La La Land", "song": "City of Stars", "artist": "Ryan Gosling & Emma Stone", "year": "2016", "search_query": "La La Land City of Stars Ryan Gosling", "forbidden_words": ["Jazz", "Piano", "Emma Stone"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/07/1b/17/071b1716-5a3f-9883-ad1c-426e531a3df3/mzaf_3825775767124502166.plus.aac.p.m4a"}, {"title": "Rocky", "song": "Gonna Fly Now", "artist": "Bill Conti", "year": "1976", "search_query": "Rocky Gonna Fly Now Bill Conti", "forbidden_words": ["Boxeo", "Balboa", "Filadelfia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ea/02/6d/ea026df4-5a5d-f6a0-c526-2a9958c4c22a/mzaf_6885755452086543650.plus.aac.p.m4a"}, {"title": "Fiebre de Sábado por la Noche", "song": "Stayin' Alive", "artist": "Bee Gees", "year": "1977", "search_query": "Saturday Night Fever Stayin Alive Bee Gees", "forbidden_words": ["Disco", "Travolta", "Baile"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/36/ed/d6/36edd6a5-2093-3aea-43f3-318f2b75373b/mzaf_14646237435212422067.plus.aac.p.m4a"}, {"title": "Psicosis", "song": "The Murder (Shower Scene)", "artist": "Bernard Herrmann", "year": "1960", "search_query": "Psycho Shower Scene Bernard Herrmann", "forbidden_words": ["Ducha", "Motel", "Cuchillo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0f/20/ea/0f20eacc-9577-2856-9c9d-9a7ba45ee331/mzaf_16075457857588971421.plus.aac.p.m4a"}, {"title": "El Bueno, el Malo y el Feo", "song": "The Good, the Bad and the Ugly", "artist": "Ennio Morricone", "year": "1966", "search_query": "The Good the Bad and the Ugly Ennio Morricone", "forbidden_words": ["Oeste", "Desierto", "Pistola"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/b0/99/86/b09986f5-ef2c-801f-ec3a-f6f2e7189826/mzaf_9640375822381239964.plus.aac.p.m4a"}, {"title": "Tiburón", "song": "Main Title (Jaws)", "artist": "John Williams", "year": "1975", "search_query": "Jaws Main Title John Williams", "forbidden_words": ["Playas", "Dientes", "Océano"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ab/67/f4/ab67f441-b14f-1902-f353-4100c6e932aa/mzaf_4470349713199856556.plus.aac.p.m4a"}, {"title": "Casablanca", "song": "As Time Goes By", "artist": "Frank Sinatra", "year": "1942", "search_query": "Casablanca As Time Goes By Frank Sinatra", "forbidden_words": ["Francia", "Piano", "Siempre"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/c1/b0/6e/c1b06ec4-125f-a61b-7b5d-be9aa5706113/mzaf_13027097327400552604.plus.aac.p.m4a"}, {"title": "La Vida es Bella", "song": "La Vita è Bella", "artist": "Nicola Piovani", "year": "1997", "search_query": "La Vita e Bella Nicola Piovani", "forbidden_words": ["Italia", "Campo", "Juego"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8f/10/68/8f106897-8aa5-a017-cb4c-eb4ec0dd68b9/mzaf_10821208425846764898.plus.aac.p.m4a"}, {"title": "Cinema Paradiso", "song": "Love Theme", "artist": "Ennio Morricone", "year": "1988", "search_query": "Cinema Paradiso Love Theme Ennio Morricone", "forbidden_words": ["Cine", "Proyector", "Sicilia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a9/22/40/a922406c-16ee-82e7-1c02-a7af4f8bdfcf/mzaf_1492557100730535064.plus.aac.p.m4a"}, {"title": "Forrest Gump", "song": "Feather Theme", "artist": "Alan Silvestri", "year": "1994", "search_query": "Forrest Gump Feather Theme Alan Silvestri", "forbidden_words": ["Correr", "Bombones", "Chocolates"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5d/0a/08/5d0a08cf-87d4-9035-5005-d79cac1f5e3e/mzaf_15866539636703193554.plus.aac.p.m4a"}, {"title": "Armagedón", "song": "I Don't Want to Miss a Thing", "artist": "Aerosmith", "year": "1998", "search_query": "Armageddon I Dont Want to Miss a Thing Aerosmith", "forbidden_words": ["Asteroide", "Bruce Willis", "Espacio"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/95/8c/ac/958cace7-ed1e-724f-5f46-b0d673c739f6/mzaf_4646028621824909013.plus.aac.p.m4a"}, {"title": "Mamma Mia!", "song": "Mamma Mia", "artist": "ABBA", "year": "2008", "search_query": "Mamma Mia ABBA", "forbidden_words": ["Grecia", "Padre", "Boda"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6d/fb/45/6dfb4566-70c7-5f5f-a497-3f8343af3920/mzaf_13401569128113882548.plus.aac.p.m4a"}, {"title": "Grease", "song": "You're the One That I Want", "artist": "John Travolta & Olivia Newton-John", "year": "1978", "search_query": "Grease You're the One That I Want John Travolta", "forbidden_words": ["Escuela", "Autos", "Chaqueta"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f0/c9/3a/f0c93aff-230f-a7f6-d1b6-37ebcc02d62c/mzaf_5514414658492873704.plus.aac.p.m4a"}, {"title": "Nace una Estrella", "song": "Shallow", "artist": "Lady Gaga & Bradley Cooper", "year": "2018", "search_query": "A Star Is Born Shallow Lady Gaga", "forbidden_words": ["Cantante", "Guitarra", "Concierto"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f8/2e/59/f82e59a0-d9fd-ce17-c568-5eb34b2f27f5/mzaf_5435765717490772642.plus.aac.p.m4a"}, {"title": "El Gran Showman", "song": "This Is Me", "artist": "Keala Settle", "year": "2017", "search_query": "The Greatest Showman This Is Me", "forbidden_words": ["Circo", "Barnum", "Espectáculo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/19/14/ef/1914efd4-057f-db2c-1959-0a064ae3f3df/mzaf_14670696818387595514.plus.aac.p.m4a"}, {"title": "Slumdog Millionaire", "song": "Jai Ho", "artist": "A.R. Rahman", "year": "2008", "search_query": "Slumdog Millionaire Jai Ho AR Rahman", "forbidden_words": ["India", "Preguntas", "Millonario"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/90/f0/0c/90f00c66-4cd0-bb6f-c4e0-972bbec388f9/mzaf_2694158803288302609.plus.aac.p.m4a"}, {"title": "Sonrisas y Lágrimas", "song": "Do-Re-Mi", "artist": "Julie Andrews", "year": "1965", "search_query": "The Sound of Music Do Re Mi Julie Andrews", "forbidden_words": ["Monja", "Familia", "Austria"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/22/96/01/2296010e-0dad-69a5-0f2b-a89556ec6f72/mzaf_7947295163722150528.plus.aac.p.m4a"}, {"title": "8 Mile", "song": "Lose Yourself", "artist": "Eminem", "year": "2002", "search_query": "8 Mile Lose Yourself Eminem", "forbidden_words": ["Rap", "Detroit", "Batalla"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/13/5a/61/135a6154-8ca2-0523-1fa2-f4ac0ea9e1e7/mzaf_13242749689945681184.plus.aac.p.m4a"}, {"title": "Footloose", "song": "Footloose", "artist": "Kenny Loggins", "year": "1984", "search_query": "Footloose Kenny Loggins", "forbidden_words": ["Bailar", "Prohibido", "Pueblo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/22/18/68/2218688a-ff36-7277-56de-c6b221d691c8/mzaf_12250270063124855744.plus.aac.p.m4a"}, {"title": "Ghost: La Sombra del Amor", "song": "Unchained Melody", "artist": "The Righteous Brothers", "year": "1990", "search_query": "Ghost Unchained Melody Righteous Brothers", "forbidden_words": ["Fantasma", "Barro", "Cerámica"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c9/b9/41/c9b94165-8481-5265-c739-728e5cc18105/mzaf_11027897680406162531.plus.aac.p.m4a"}, {"title": "Amadeus", "song": "Lacrimosa", "artist": "Mozart", "year": "1984", "search_query": "Amadeus Lacrimosa Mozart", "forbidden_words": ["Compositor", "Salieri", "Ópera"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/86/1e/0f/861e0f43-8626-3d4f-10f9-9e714f09006f/mzaf_10906869285380827889.plus.aac.p.m4a"}, {"title": "Star Wars", "song": "Main Title / Imperial March", "artist": "John Williams", "year": "1977", "search_query": "Star Wars Main Title John Williams", "forbidden_words": ["Darth Vader", "Jedi", "Galaxia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/22/70/d3/2270d3e9-b58f-5211-b096-dd32426144c1/mzaf_1330954041442566776.plus.aac.p.m4a"}, {"title": "Harry Potter", "song": "Hedwig's Theme", "artist": "John Williams", "year": "2001", "search_query": "Harry Potter Hedwig Theme John Williams", "forbidden_words": ["Magia", "Hogwarts", "Varita"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/81/ee/ae/81eeae0a-da63-1fc7-42c1-21b498b85de8/mzaf_13621452881875123588.plus.aac.p.m4a"}, {"title": "El Señor de los Anillos", "song": "Concerning Hobbits", "artist": "Howard Shore", "year": "2001", "search_query": "The Lord of the Rings Concerning Hobbits Howard Shore", "forbidden_words": ["Anillo", "Frodo", "Mordor"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cd/1e/2c/cd1e2c74-a074-aa60-ec24-8abee7dcec43/mzaf_12399500222028997548.plus.aac.p.m4a"}, {"title": "Los Vengadores", "song": "The Avengers Main Theme", "artist": "Alan Silvestri", "year": "2012", "search_query": "The Avengers Main Title Alan Silvestri", "forbidden_words": ["Thanos", "Marvel", "Superhéroes"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/bf/a7/9f/bfa79f79-b635-0f8c-d72f-e59db79108af/mzaf_9009025771638181825.plus.aac.p.m4a"}, {"title": "Pantera Negra", "song": "All the Stars", "artist": "Kendrick Lamar & SZA", "year": "2018", "search_query": "Black Panther All the Stars Kendrick Lamar", "forbidden_words": ["Wakanda", "Rey", "Vibranium"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5f/c3/17/5fc31767-8c31-128b-920e-f0f734bc2ac5/mzaf_3600375740601988513.plus.aac.p.m4a"}, {"title": "Guardianes de la Galaxia", "song": "Hooked on a Feeling", "artist": "Blue Swede", "year": "2014", "search_query": "Guardians of the Galaxy Hooked on a Feeling", "forbidden_words": ["Groot", "Casete", "Mapache"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d3/6c/64/d36c6420-21f8-9e2d-9170-1eda13209617/mzaf_7003972075215037414.plus.aac.p.m4a"}, {"title": "Batman: El Caballero de la Noche", "song": "Why So Serious?", "artist": "Hans Zimmer", "year": "2008", "search_query": "The Dark Knight Why So Serious Hans Zimmer", "forbidden_words": ["Guasón", "Joker", "Ciudad Gótica"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/2b/3b/90/2b3b90c5-3cdc-fef8-7d74-5de518488fb5/mzaf_4685723510642648566.plus.aac.p.m4a"}, {"title": "Misión Imposible", "song": "Theme from Mission: Impossible", "artist": "Lalo Schifrin", "year": "1996", "search_query": "Mission Impossible Theme Lalo Schifrin", "forbidden_words": ["Tom Cruise", "Agente", "Máscara"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/17/6a/b9/176ab927-87f9-0a19-8484-260f711fb394/mzaf_3145715186897362042.plus.aac.p.m4a"}, {"title": "007: Skyfall", "song": "Skyfall", "artist": "Adele", "year": "2012", "search_query": "Skyfall Adele 007", "forbidden_words": ["James Bond", "Espía", "Licencia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6c/48/0e/6c480edc-89f5-a9cf-b309-63c5237efe92/mzaf_3142604484249449871.plus.aac.p.m4a"}, {"title": "Jurassic Park", "song": "Theme from Jurassic Park", "artist": "John Williams", "year": "1993", "search_query": "Jurassic Park Theme John Williams", "forbidden_words": ["Dinosaurio", "T-Rex", "Isla"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/45/0c/30/450c30bc-c7c9-6ceb-352a-a78c4304eebf/mzaf_6333901715385654004.plus.aac.p.m4a"}, {"title": "Volver al Futuro", "song": "Back to the Future Theme", "artist": "Alan Silvestri", "year": "1985", "search_query": "Back to the Future Main Title Alan Silvestri", "forbidden_words": ["DeLorean", "Marty", "Doc"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4e/c4/1c/4ec41ceb-e46a-a896-67c8-a2c08fa6c926/mzaf_906025227683505700.plus.aac.p.m4a"}, {"title": "Indiana Jones", "song": "The Raiders March", "artist": "John Williams", "year": "1981", "search_query": "Indiana Jones The Raiders March John Williams", "forbidden_words": ["Látigo", "Sombrero", "Arqueólogo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/3c/d5/1d/3cd51d95-0ee5-f5fe-ced2-12d8a854361b/mzaf_2431570209513524121.plus.aac.p.m4a"}, {"title": "El Origen (Inception)", "song": "Time", "artist": "Hans Zimmer", "year": "2010", "search_query": "Inception Time Hans Zimmer", "forbidden_words": ["Sueños", "Trompo", "DiCaprio"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e0/1d/a4/e01da4a2-a75f-7ebf-9971-3d49e17efc57/mzaf_10500078769097048384.plus.aac.p.m4a"}, {"title": "Matrix", "song": "Clubbed to Death", "artist": "Rob Dougan", "year": "1999", "search_query": "Matrix Clubbed to Death Rob Dougan", "forbidden_words": ["Pastilla", "Neo", "Simulación"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/cc/81/ab/cc81ab1f-978b-e170-b773-3d2ec5cb6043/mzaf_6735656694933035279.plus.aac.p.m4a"}, {"title": "Piratas del Caribe", "song": "He's a Pirate", "artist": "Hans Zimmer", "year": "2003", "search_query": "Pirates of the Caribbean He's a Pirate Hans Zimmer", "forbidden_words": ["Jack Sparrow", "Barco", "Isla"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/0d/21/07/0d2107c4-573b-6649-229e-e715501010cc/mzaf_8361386078907471110.plus.aac.p.m4a"}, {"title": "Spider-Man: Into the Spider-Verse", "song": "Sunflower", "artist": "Post Malone & Swae Lee", "year": "2018", "search_query": "Spider-Verse Sunflower Post Malone", "forbidden_words": ["Telaraña", "Miles Morales", "Multiverso"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/98/f0/d6/98f0d67e-f8bf-762d-cac7-1c6b3b6b35dd/mzaf_4543283896248560946.plus.aac.p.m4a"}, {"title": "Iron Man", "song": "Back in Black", "artist": "AC/DC", "year": "2008", "search_query": "Iron Man Back in Black ACDC", "forbidden_words": ["Tony Stark", "Armadura", "Marvel"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/08/2e/ac/082eac8c-1d0e-f72f-7b37-b8e037ff1579/mzaf_7587164327744022409.plus.aac.p.m4a"}, {"title": "Top Gun", "song": "Danger Zone", "artist": "Kenny Loggins", "year": "1986", "search_query": "Top Gun Danger Zone Kenny Loggins", "forbidden_words": ["Piloto", "Avión", "Tom Cruise"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8d/c8/19/8dc81935-5620-0b29-3f4c-acc3f6479796/mzaf_14998514993249023640.plus.aac.p.m4a"}, {"title": "Cazafantasmas", "song": "Ghostbusters", "artist": "Ray Parker Jr.", "year": "1984", "search_query": "Ghostbusters Ray Parker Jr", "forbidden_words": ["Fantasmas", "Moco", "Auto"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/63/8b/e3/638be3a1-2f5e-5cff-9b58-085e3b793cbd/mzaf_10733010531783613784.plus.aac.p.m4a"}, {"title": "Rápidos y Furiosos 7", "song": "See You Again", "artist": "Wiz Khalifa & Charlie Puth", "year": "2015", "search_query": "Fast and Furious 7 See You Again Wiz Khalifa", "forbidden_words": ["Autos", "Familia", "Carreras"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1a/56/6c/1a566cbc-16ea-708b-5bad-e576598fd134/mzaf_6353919847010163362.plus.aac.p.m4a"}, {"title": "Superman", "song": "Main Title (Superman)", "artist": "John Williams", "year": "1978", "search_query": "Superman Main Title John Williams", "forbidden_words": ["Capa", "Kryptonita", "Krypton"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e3/e1/fd/e3e1fdec-3483-fb83-3041-d01577fd1415/mzaf_13690916780854407664.plus.aac.p.m4a"}, {"title": "Terminator 2", "song": "Main Title (Terminator)", "artist": "Brad Fiedel", "year": "1991", "search_query": "Terminator 2 Main Title Brad Fiedel", "forbidden_words": ["Robot", "Futuro", "Schwarzenegger"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f3/83/ba/f383baaa-eac4-c630-e91b-2ae649f640bc/mzaf_12668565942234754287.plus.aac.p.m4a"}, {"title": "Tron: Legacy", "song": "Derezzed", "artist": "Daft Punk", "year": "2010", "search_query": "Tron Legacy Derezzed Daft Punk", "forbidden_words": ["Videojuego", "Motos", "Neón"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b0/31/b2/b031b227-88da-3dee-05fe-520b96f30285/mzaf_8299314304356888270.plus.aac.p.m4a"}, {"title": "Dune", "song": "Paul's Dream", "artist": "Hans Zimmer", "year": "2021", "search_query": "Dune Paul's Dream Hans Zimmer", "forbidden_words": ["Desierto", "Gusano", "Especia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9f/5e/3d/9f5e3da8-e698-31b3-c4e4-5964df457951/mzaf_11074540054311181787.plus.aac.p.m4a"}, {"title": "Mad Max: Fury Road", "song": "Brothers In Arms", "artist": "Junkie XL", "year": "2015", "search_query": "Mad Max Fury Road Brothers In Arms Junkie XL", "forbidden_words": ["Camión", "Desierto", "Guitarra"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/34/68/89/3468897a-5b02-5779-3e4c-f4280d7cbf1f/mzaf_7053927198605704346.plus.aac.p.m4a"}, {"title": "El Rey León", "song": "Circle of Life / Hakuna Matata", "artist": "Elton John", "year": "1994", "search_query": "The Lion King Circle of Life Elton John", "forbidden_words": ["Simba", "Mufasa", "Sabana"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3f/be/3a/3fbe3ae4-6bdf-3ab5-b1fc-c64ed09f295f/mzaf_14415717605075682462.plus.aac.p.m4a"}, {"title": "Frozen", "song": "Let It Go", "artist": "Idina Menzel", "year": "2013", "search_query": "Frozen Let It Go Idina Menzel", "forbidden_words": ["Hielo", "Elsa", "Olaf"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/6c/4e/be/6c4ebef9-901d-e32f-c770-cf26ee589179/mzaf_7585957285423980495.plus.aac.p.m4a"}, {"title": "Coco", "song": "Recuérdame (Remember Me)", "artist": "Carlos Rivera", "year": "2017", "search_query": "Coco Recuérdame Remember Me", "forbidden_words": ["México", "Guitarra", "Muertos"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4b/58/15/4b5815fd-a6ef-d9c4-81f2-9a69cd211281/mzaf_16169343320647003292.plus.aac.p.m4a"}, {"title": "Aladdín", "song": "A Whole New World", "artist": "Brad Kane & Lea Salonga", "year": "1992", "search_query": "Aladdin A Whole New World", "forbidden_words": ["Genio", "Lámpara", "Alfombra"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/7e/50/22/7e5022ce-974d-8a47-efda-efe789cd206c/mzaf_16690203909300285497.plus.aac.p.m4a"}, {"title": "La Sirenita", "song": "Under the Sea", "artist": "Samuel E. Wright", "year": "1989", "search_query": "The Little Mermaid Under the Sea", "forbidden_words": ["Ariel", "Cangrejo", "Mar"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/9e/ba/96/9eba96d0-e2a6-e674-e457-d9521b3a089c/mzaf_14998204985578747107.plus.aac.p.m4a"}, {"title": "Toy Story", "song": "You've Got a Friend in Me", "artist": "Randy Newman", "year": "1995", "search_query": "Toy Story You've Got a Friend in Me Randy Newman", "forbidden_words": ["Woody", "Buzz", "Juguetes"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/74/33/7d/74337de2-3b51-db2e-3f46-2b4159212c89/mzaf_1795543695107107317.plus.aac.p.m4a"}, {"title": "Moana", "song": "How Far I'll Go", "artist": "Auli'i Cravalho", "year": "2016", "search_query": "Moana How Far I'll Go Auli'i Cravalho", "forbidden_words": ["Océano", "Isla", "Maui"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/f0/83/9f/f0839f4e-61e3-a819-8959-9ee734454e35/mzaf_16552276917425095079.plus.aac.p.m4a"}, {"title": "Encanto", "song": "We Don't Talk About Bruno", "artist": "Encanto Cast", "year": "2021", "search_query": "Encanto We Don't Talk About Bruno", "forbidden_words": ["Colombia", "Mirabel", "Familia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/55/0a/76/550a76f2-cf9c-3e07-8b9c-5c210e73af44/mzaf_13858819433882654714.plus.aac.p.m4a"}, {"title": "La Bella y la Bestia", "song": "Beauty and the Beast", "artist": "Celine Dion & Peabo Bryson", "year": "1991", "search_query": "Beauty and the Beast Celine Dion", "forbidden_words": ["Rosa", "Castillo", "Vajilla"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/cb/75/99/cb7599f5-3fc5-de23-ad2c-766a0b744ad9/mzaf_12426634965966306100.plus.aac.p.m4a"}, {"title": "Shrek", "song": "All Star", "artist": "Smash Mouth", "year": "2001", "search_query": "Shrek All Star Smash Mouth", "forbidden_words": ["Ogro", "Burro", "Pantano"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/b0/03/ef/b003ef4c-1a22-6b15-e851-fb106ad96a3b/mzaf_3320656447657988367.plus.aac.p.m4a"}, {"title": "Los Increíbles", "song": "The Incredibles Theme", "artist": "Michael Giacchino", "year": "2004", "search_query": "The Incredibles Main Theme Michael Giacchino", "forbidden_words": ["Traje", "Familia", "Superhéroes"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview19/v4/11/ba/bf/11babfe5-04e4-2f70-35df-0ae632970232/mzaf_7515257914147830324.plus.aac.p.m4a"}, {"title": "Mulan", "song": "I'll Make a Man Out of You", "artist": "Donny Osmond", "year": "1998", "search_query": "Mulan I'll Make a Man Out of You", "forbidden_words": ["China", "Dragón", "Ejército"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/32/d8/eb/32d8eb29-f588-d44e-dc1b-7345f36407d5/mzaf_3448078749027880676.plus.aac.p.m4a"}, {"title": "Tarzán", "song": "You'll Be in My Heart", "artist": "Phil Collins", "year": "1999", "search_query": "Tarzan You'll Be in My Heart Phil Collins", "forbidden_words": ["Selva", "Monos", "Gorila"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/08/fc/47/08fc476e-a468-6d99-7a38-10dd069438ad/mzaf_9160167947158091816.plus.aac.p.m4a"}, {"title": "Hércules", "song": "Go the Distance", "artist": "Michael English", "year": "1997", "search_query": "Hercules Go the Distance", "forbidden_words": ["Grecia", "Dios", "Olimpo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ae/e0/0d/aee00de0-4c5c-f854-b8a5-4d9496181e2e/mzaf_13468286191233087315.plus.aac.p.m4a"}, {"title": "Up: Una Aventura de Altura", "song": "Married Life", "artist": "Michael Giacchino", "year": "2009", "search_query": "Up Married Life Michael Giacchino", "forbidden_words": ["Globos", "Casa", "Anciano"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/70/d5/7a/70d57aab-e4fa-1dc0-a58f-9357e38c567b/mzaf_14650083088179348809.plus.aac.p.m4a"}, {"title": "Monsters, Inc.", "song": "If I Didn't Have You", "artist": "Randy Newman", "year": "2001", "search_query": "Monsters Inc If I Didn't Have You", "forbidden_words": ["Sully", "Mike", "Puertas"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1b/66/0a/1b660a48-fcbc-35c2-6744-062bf8af3644/mzaf_6568015295826639479.plus.aac.p.m4a"}, {"title": "Buscando a Nemo", "song": "Nemo Egg", "artist": "Thomas Newman", "year": "2003", "search_query": "Finding Nemo Nemo Egg Thomas Newman", "forbidden_words": ["Pez", "Dory", "Anémona"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/c8/0d/04/c80d047e-ff4e-0bfc-dda6-0a78bb86f4c8/mzaf_3827475213021293644.plus.aac.p.m4a"}, {"title": "Spider-Man: Across the Spider-Verse", "song": "Am I Dreaming", "artist": "Metro Boomin", "year": "2023", "search_query": "Across the Spider-Verse Am I Dreaming Metro Boomin", "forbidden_words": ["Multiverso", "Gwen", "Miles"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/10/83/4f/10834fcf-1bc6-46e9-1bbe-4e4dfaf997c3/mzaf_11588678333799017051.plus.aac.p.m4a"}, {"title": "Mi Villano Favorito 2", "song": "Happy", "artist": "Pharrell Williams", "year": "2013", "search_query": "Despicable Me 2 Happy Pharrell Williams", "forbidden_words": ["Minions", "Gru", "Banana"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ed/a0/19/eda019cf-2794-66d1-208d-2e2e74c26c3d/mzaf_16469762943852039623.plus.aac.p.m4a"}, {"title": "Madagascar", "song": "I Like to Move It", "artist": "Real 2 Reel", "year": "2005", "search_query": "Madagascar I Like to Move It", "forbidden_words": ["Zoológico", "Lémur", "Pingüinos"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/f9/49/d3/f949d3e6-e850-8474-5e6c-93b3de4792f8/mzaf_13594316837483549820.plus.aac.p.m4a"}, {"title": "El Extraño Mundo de Jack", "song": "This Is Halloween", "artist": "Danny Elfman", "year": "1993", "search_query": "The Nightmare Before Christmas This Is Halloween", "forbidden_words": ["Calabaza", "Navidad", "Halloween"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/10/32/35/103235a0-4c6a-4eb2-acb3-f87086143048/mzaf_13228789195537957728.plus.aac.p.m4a"}, {"title": "Kung Fu Panda", "song": "Oogway Ascends", "artist": "Hans Zimmer", "year": "2008", "search_query": "Kung Fu Panda Oogway Ascends Hans Zimmer", "forbidden_words": ["Panda", "Fideos", "Dragón"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a3/c3/33/a3c3330f-ac8c-3daa-2af9-7117878b15f6/mzaf_3960137280610359666.plus.aac.p.m4a"}, {"title": "Cómo Entrenar a Tu Dragón", "song": "Test Drive", "artist": "John Powell", "year": "2010", "search_query": "How to Train Your Dragon Test Drive John Powell", "forbidden_words": ["Vikingos", "Chimuelo", "Volar"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/80/f0/ef/80f0ef8e-8c55-20ce-df1e-dbbfb8aeba2e/mzaf_10980820564622501759.plus.aac.p.m4a"}, {"title": "Super Mario Bros. La Película", "song": "Peaches", "artist": "Jack Black", "year": "2023", "search_query": "Super Mario Bros Peaches Jack Black", "forbidden_words": ["Bowser", "Princesa", "Fontanero"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/35/88/55/358855a2-410f-c6bf-0f15-0f60ef4961a7/mzaf_17527717735876417165.plus.aac.p.m4a"}, {"title": "Anastasia", "song": "Once Upon a December", "artist": "Liz Callaway", "year": "1997", "search_query": "Anastasia Once Upon a December", "forbidden_words": ["Rusia", "Palacio", "Princesa"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/17/be/dd/17bedd62-c41b-1186-aaaf-8c11915ea20f/mzaf_3472923010010866899.plus.aac.p.m4a"}, {"title": "Pulp Fiction", "song": "Misirlou", "artist": "Dick Dale", "year": "1994", "search_query": "Pulp Fiction Misirlou Dick Dale", "forbidden_words": ["Tarantino", "Travolta", "Maletín"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/1a/83/dd/1a83ddfb-94aa-1d03-919f-4a874f119cc7/mzaf_5919605644810865544.plus.aac.p.m4a"}, {"title": "E.T. el Extraterrestre", "song": "Flying Theme", "artist": "John Williams", "year": "1982", "search_query": "E.T. Flying Theme John Williams", "forbidden_words": ["Alien", "Bicicleta", "Dedo"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/85/61/fd/8561fd78-4349-ede6-d633-50c146ffa43b/mzaf_15209395579821267615.plus.aac.p.m4a"}, {"title": "El Club de la Pelea", "song": "Where Is My Mind?", "artist": "Pixies", "year": "1999", "search_query": "Fight Club Where Is My Mind Pixies", "forbidden_words": ["Jabón", "Brad Pitt", "Regla"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/fe/03/d0/fe03d057-de23-fd05-cff8-f0ae5eb1cb99/mzaf_18018835550092786771.plus.aac.p.m4a"}, {"title": "Trainspotting", "song": "Born Slippy", "artist": "Underworld", "year": "1996", "search_query": "Trainspotting Born Slippy Underworld", "forbidden_words": ["Escocia", "Drogas", "Drogas"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/55/7b/2d/557b2df8-3592-e1d3-5e49-12fa0c80cf82/mzaf_17812663078551126252.plus.aac.p.m4a"}, {"title": "Kill Bill: Vol. 1", "song": "Battle Without Honor or Humanity", "artist": "Tomoyasu Hotei", "year": "2003", "search_query": "Kill Bill Battle Without Honor or Humanity", "forbidden_words": ["Katana", "Amarillo", "Novia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d5/5d/21/d55d217f-ab26-edb3-4de6-d4abfa4d35d0/mzaf_6381978764870091182.plus.aac.p.m4a"}, {"title": "Space Jam", "song": "Space Jam Theme", "artist": "Quad City DJ's", "year": "1996", "search_query": "Space Jam Quad City DJs", "forbidden_words": ["Básquetbol", "Michael Jordan", "Bugs Bunny"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/5c/7a/93/5c7a9372-62af-23b8-e8d0-f7e82dd3875a/mzaf_50452743001158593.plus.aac.p.m4a"}, {"title": "Hombres de Negro", "song": "Men in Black", "artist": "Will Smith", "year": "1997", "search_query": "Men in Black Will Smith", "forbidden_words": ["Aliens", "Gafas", "Traje"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/df/76/60/df7660a8-6330-d384-2df7-c3ac9566bd8c/mzaf_5968128030680647840.plus.aac.p.m4a"}, {"title": "Dirty Dancing", "song": "(I've Had) The Time of My Life", "artist": "Bill Medley & Jennifer Warnes", "year": "1987", "search_query": "Dirty Dancing The Time of My Life", "forbidden_words": ["Baile", "Hotel", "Salto"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/41/f3/49/41f34968-bfb6-7253-58f6-e2d56b0e0979/mzaf_6987448208011331365.plus.aac.p.m4a"}, {"title": "Pretty Woman", "song": "Oh, Pretty Woman", "artist": "Roy Orbison", "year": "1990", "search_query": "Pretty Woman Roy Orbison", "forbidden_words": ["Compras", "Hotel", "Richard Gere"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bc/45/c5/bc45c5e4-61d9-8074-df34-6117fb8146c2/mzaf_17905078581365919431.plus.aac.p.m4a"}, {"title": "El Profesional (Léon)", "song": "Shape of My Heart", "artist": "Sting", "year": "1994", "search_query": "Leon The Professional Shape of My Heart Sting", "forbidden_words": ["Planta", "Asesino", "Niña"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/86/83/04/868304d7-b59b-1875-9473-0bb8fff64535/mzaf_1168376021829476583.plus.aac.p.m4a"}, {"title": "Drive", "song": "Nightcall", "artist": "Kavinsky", "year": "2011", "search_query": "Drive Nightcall Kavinsky", "forbidden_words": ["Auto", "Chaqueta", "Guantes"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d2/45/fb/d245fbf9-8570-fdc0-5e6b-aa528c130486/mzaf_11947081694159530687.plus.aac.p.m4a"}, {"title": "Réquiem por un Sueño", "song": "Lux Aeterna", "artist": "Clint Mansell", "year": "2000", "search_query": "Requiem for a Dream Lux Aeterna Clint Mansell", "forbidden_words": ["Televisión", "Adicción", "Música"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1b/13/b2/1b13b2a1-7016-e6cd-4dc0-0fecbd813707/mzaf_7355488807291141457.plus.aac.p.m4a"}, {"title": "La Naranja Mecánica", "song": "Funeral of Queen Mary", "artist": "Wendy Carlos", "year": "1971", "search_query": "A Clockwork Orange Funeral of Queen Mary", "forbidden_words": ["Sombrero", "Leche", "Violencia"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/51/fb/f1/51fbf1db-5cec-3294-91c1-303975e6dd6f/mzaf_6738625069934127509.plus.aac.p.m4a"}, {"title": "Apocalypse Now", "song": "Ride of the Valkyries", "artist": "Wagner", "year": "1979", "search_query": "Apocalypse Now Ride of the Valkyries Wagner", "forbidden_words": ["Helicópteros", "Vietnam", "Río"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/df/85/00/df850044-648c-e630-58e2-29e50760cc91/mzaf_4401785502336607250.plus.aac.p.m4a"}, {"title": "El Quinto Elemento", "song": "The Diva Dance", "artist": "Inva Mula", "year": "1997", "search_query": "The Fifth Element The Diva Dance", "forbidden_words": ["Azul", "Ópera", "Piedras"], "audio_url": ""}, {"title": "Beetlejuice", "song": "Day-O (Banana Boat Song)", "artist": "Harry Belafonte", "year": "1988", "search_query": "Beetlejuice Day-O Harry Belafonte", "forbidden_words": ["Fantasma", "Tres Veces", "Cena"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a1/1a/dc/a11adc95-4bc3-a71f-d678-d64b8cd8a8aa/mzaf_17378642947492284445.plus.aac.p.m4a"}, {"title": "Flashdance", "song": "Flashdance... What a Feeling", "artist": "Irene Cara", "year": "1983", "search_query": "Flashdance What a Feeling Irene Cara", "forbidden_words": ["Agua", "Silla", "Baile"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ee/f0/fd/eef0fda5-3a77-ba9a-41e1-31e0fe603faa/mzaf_4287430643698303778.plus.aac.p.m4a"}, {"title": "Escuela de Rock", "song": "School of Rock Theme", "artist": "Jack Black", "year": "2003", "search_query": "School of Rock Jack Black", "forbidden_words": ["Profesor", "Guitarra", "Banda"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/a7/98/a4/a798a4a2-dc88-1dcc-8afa-c14998734b1c/mzaf_8383293445281438560.plus.aac.p.m4a"}, {"title": "Bohemian Rhapsody", "song": "Bohemian Rhapsody", "artist": "Queen", "year": "2018", "search_query": "Bohemian Rhapsody Queen", "forbidden_words": ["Freddie", "Concierto", "Bigote"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/15/91/df/1591df73-dd8a-ee42-bfb8-51c8cdda7078/mzaf_9819305553372065518.plus.aac.p.m4a"}, {"title": "Rocketman", "song": "Tiny Dancer", "artist": "Elton John", "year": "2019", "search_query": "Rocketman Tiny Dancer Elton John", "forbidden_words": ["Piano", "Gafas", "Vestuario"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/01/5f/bc/015fbcbc-7791-5102-9a76-6d6648f362b0/mzaf_6818294948067833285.plus.aac.p.m4a"}, {"title": "Barbie", "song": "Dance the Night / I'm Just Ken", "artist": "Dua Lipa & Ryan Gosling", "year": "2023", "search_query": "Barbie Dance the Night Dua Lipa", "forbidden_words": ["Rosa", "Muñeca", "Ken"], "audio_url": ""}, {"title": "Oppenheimer", "song": "Can You Hear The Music", "artist": "Ludwig Göransson", "year": "2023", "search_query": "Oppenheimer Can You Hear The Music Ludwig Goransson", "forbidden_words": ["Bomba", "Átomo", "Física"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/0d/b0/b8/0db0b839-4fbc-2bb6-e280-3c9dc1302cf2/mzaf_12466660795519790459.plus.aac.p.m4a"}, {"title": "El Graduado", "song": "The Sound of Silence", "artist": "Simon & Garfunkel", "year": "1967", "search_query": "The Graduate The Sound of Silence Simon Garfunkel", "forbidden_words": ["Piscina", "Iglesia", "Boda"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/93/1b/e3/931be3d5-2d92-30ba-e654-ee4c13f50f19/mzaf_16135248673165047798.plus.aac.p.m4a"}, {"title": "Amélie", "song": "La Valse d'Amélie", "artist": "Yann Tiersen", "year": "2001", "search_query": "Amelie La Valse d'Amelie Yann Tiersen", "forbidden_words": ["París", "Fotomatón", "Duende"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/5c/67/f0/5c67f02a-f50e-b677-dc06-5516fe9b1f5b/mzaf_3393553286202948128.plus.aac.p.m4a"}, {"title": "Interstellar", "song": "First Step / Cornfield Chase", "artist": "Hans Zimmer", "year": "2014", "search_query": "Interstellar First Step Hans Zimmer", "forbidden_words": ["Espacio", "Reloj", "Agujero"], "audio_url": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3a/ee/23/3aee2300-f6f7-a006-e20f-28092e814cbe/mzaf_1624587954644600228.plus.aac.p.m4a"}];
         const DESAFIOS = {"tararea": [{"desc": "Tararea el tema principal sin cantar letras ni decir palabras."}, {"desc": "Tararea el ritmo principal de la canción usando solo 'Mmm-mmm' o 'La-la-la'."}], "palabra_prohibida": [{"desc": "Describe la película sin mencionar las 3 palabras prohibidas indicadas."}, {"desc": "Explica la trama al equipo omitiendo completamente las 3 palabras vetadas."}], "mimica": [{"desc": "Actúa en silencio la escena principal de la película sin hablar ni emitir sonidos."}, {"desc": "Haz mímica del personaje principal o del momento más famoso de la película en 40 segundos."}]};
 
         let currentCard = null;
-        let html5QrCode = null;
         let timerInterval = null;
         let musicTimerInterval = null;
         let secretMusicTimerInterval = null;
+
+        // Historial de películas jugadas para no repetir
+        let peliculasJugadas = JSON.parse(localStorage.getItem('cinesonoro_pelis_jugadas')) || [];
+
+        // Películas clásicas para Desafíos
+        const PELICULAS_CLASICAS = [
+            "Titanic", "El Padrino", "Gladiador", "La La Land", "Rocky", 
+            "Fiebre de Sábado por la Noche", "Tiburón", "Armagedón", "Mamma Mia!", "Grease",
+            "Star Wars", "Harry Potter", "El Señor de los Anillos", "Los Vengadores",
+            "Jurassic Park", "Volver al Futuro", "Indiana Jones", "Piratas del Caribe",
+            "El Rey León", "Frozen", "Coco", "Aladdín", "Toy Story", "Shrek", "Monsters, Inc."
+        ];
 
         // Marcador de Equipos y Meta Personalizable
         let metaPuntos = parseInt(localStorage.getItem('cinesonoro_meta_puntos')) || 10;
@@ -565,90 +681,98 @@
             verificarGanador();
         }
 
-        // --- NAVEGACIÓN ENTRE MODOS ---
         function cambiarModo(modo) {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active-view'));
 
-            document.getElementById('nav-' + modo).classList.add('active');
+            if (document.getElementById('nav-' + modo)) {
+                document.getElementById('nav-' + modo).classList.add('active');
+            }
             document.getElementById('view-' + modo).classList.add('active-view');
+        }
 
-            if (modo === 'escaner') {
-                activarCamaraQR();
-            } else if (html5QrCode) {
-                html5QrCode.stop().catch(() => {});
+        function reiniciarMazo() {
+            if (confirm('¿Deseas reiniciar el mazo para volver a jugar todas las 100 películas?')) {
+                peliculasJugadas = [];
+                localStorage.setItem('cinesonoro_pelis_jugadas', JSON.stringify(peliculasJugadas));
+                sacarCartaMazo();
             }
         }
 
-        // --- LÓGICA MODO MAZO ---
         function sacarCartaMazo() {
             clearInterval(timerInterval);
             clearInterval(musicTimerInterval);
             clearInterval(secretMusicTimerInterval);
-            const badge = document.getElementById('music-timer-badge');
-            if (badge) badge.style.display = 'none';
 
             // Reseteo completo de máscaras
             document.getElementById('deck-normal-mask').style.display = 'none';
             document.getElementById('deck-challenge-mask').style.display = 'none';
             document.getElementById('deck-challenge-secret').style.display = 'none';
             document.getElementById('deck-revealed').style.display = 'none';
-            
-            const titleMask = document.getElementById('deck-title-mask');
-            if (titleMask) titleMask.style.display = 'flex';
 
-            // Selección aleatoria
+            // Filtrar películas no jugadas
+            let disponibles = PELICULAS.filter(p => !peliculasJugadas.includes(p.title));
+            if (disponibles.length === 0) {
+                alert("¡Has completado las 100 películas del catálogo! Reiniciando el mazo automáticamente...");
+                peliculasJugadas = [];
+                disponibles = PELICULAS;
+            }
+
             const rand = Math.random() * 100;
-            const pelicula = PELICULAS[Math.floor(Math.random() * PELICULAS.length)];
+            let pelicula = disponibles[Math.floor(Math.random() * disponibles.length)];
 
-            // URL y QR de Spotify
-            const spotifyUrl = `https://open.spotify.com/track/${pelicula.id || ''}`;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(spotifyUrl)}`;
-            
-            document.getElementById('deck-qr-img').src = qrUrl;
+            // Registrar película jugada
+            peliculasJugadas.push(pelicula.title);
+            localStorage.setItem('cinesonoro_pelis_jugadas', JSON.stringify(peliculasJugadas));
+
+            // Actualizar contador visual
+            document.getElementById('deck-counter-text').innerText = `Mazo: ${peliculasJugadas.length} / ${PELICULAS.length} jugadas`;
+
             pausarAudioMazo();
             pausarSecretAudio();
 
             if (rand < 75) {
-                // Película Normal (75% de probabilidad)
+                // Película Normal (75% prob)
                 currentCard = { type: 'normal', data: pelicula };
                 document.getElementById('deck-badge').innerText = '🎬 PELÍCULA NORMAL';
-                document.getElementById('deck-badge').style.background = 'var(--accent-gold)';
+                document.getElementById('deck-badge').style.background = 'linear-gradient(135deg, #ffc107 0%, #ff8800 100%)';
                 document.getElementById('deck-normal-mask').style.display = 'block';
-            } else if (rand < 82) {
-                // Tararea (7% de probabilidad)
-                const d = DESAFIOS.tararea[Math.floor(Math.random() * DESAFIOS.tararea.length)];
-                currentCard = { type: 'desafio', subtype: 'tararea', data: pelicula, challenge: d };
-                document.getElementById('deck-badge').innerText = '🎵 DESAFÍO: TARAREA (40s)';
-                document.getElementById('deck-badge').style.background = '#00f5d4';
-                prepararDesafioPrivado(pelicula, '🎵 DESAFÍO: TARAREA', d.desc, '#00f5d4');
-                document.getElementById('deck-challenge-mask').style.display = 'block';
-            } else if (rand < 89) {
-                // Palabra Prohibida (7% de probabilidad)
-                const fw = pelicula.forbidden_words || ['Película', 'Personaje', 'Cine'];
-                const textInst = `Explica la película sin mencionar las siguientes 3 palabras prohibidas:
+            } else {
+                // Para Desafíos, elegimos una película ultra conocida
+                let disponiblesClasicas = PELICULAS.filter(p => PELICULAS_CLASICAS.includes(p.title));
+                if (disponiblesClasicas.length > 0) {
+                    pelicula = disponiblesClasicas[Math.floor(Math.random() * disponiblesClasicas.length)];
+                }
+
+                if (rand < 83) {
+                    // Tararea
+                    const d = DESAFIOS.tararea[Math.floor(Math.random() * DESAFIOS.tararea.length)];
+                    currentCard = { type: 'desafio', subtype: 'tararea', data: pelicula, challenge: d };
+                    document.getElementById('deck-badge').innerText = '🎵 DESAFÍO: TARAREA (40s)';
+                    document.getElementById('deck-badge').style.background = 'var(--accent-cyan)';
+                    prepararDesafioPrivado(pelicula, '🎵 DESAFÍO: TARAREA', d.desc, 'var(--accent-cyan)');
+                    document.getElementById('deck-challenge-mask').style.display = 'block';
+                } else if (rand < 91) {
+                    // Palabra Prohibida
+                    const fw = pelicula.forbidden_words || ['Película', 'Personaje', 'Cine'];
+                    const textInst = `Explica la película sin mencionar las 3 palabras prohibidas:
 1. 🚫 ${I_fw(fw, 0)}
 2. 🚫 ${I_fw(fw, 1)}
 3. 🚫 ${I_fw(fw, 2)}`;
-                currentCard = { type: 'desafio', subtype: 'palabra_prohibida', data: pelicula, challenge: { desc: textInst } };
-                document.getElementById('deck-badge').innerText = '🚫 DESAFÍO: PALABRA PROHIBIDA (40s)';
-                document.getElementById('deck-badge').style.background = '#ff0055';
-                prepararDesafioPrivado(pelicula, '🚫 DESAFÍO: PALABRA PROHIBIDA', textInst, '#ff0055');
-                document.getElementById('deck-challenge-mask').style.display = 'block';
-            } else if (rand < 95) {
-                // Mímica (6% de probabilidad)
-                const d = DESAFIOS.mimica[Math.floor(Math.random() * DESAFIOS.mimica.length)];
-                currentCard = { type: 'desafio', subtype: 'mimica', data: pelicula, challenge: d };
-                document.getElementById('deck-badge').innerText = '🎭 DESAFÍO: MÍMICA (40s)';
-                document.getElementById('deck-badge').style.background = '#b388eb';
-                prepararDesafioPrivado(pelicula, '🎭 DESAFÍO: MÍMICA', d.desc, '#b388eb');
-                document.getElementById('deck-challenge-mask').style.display = 'block';
-            } else {
-                // Carta Racha QR+
-                currentCard = { type: 'racha', data: pelicula };
-                document.getElementById('deck-badge').innerText = '🔥 CARTA QR+ (RACHA)';
-                document.getElementById('deck-badge').style.background = '#ffb703';
-                document.getElementById('deck-normal-mask').style.display = 'block';
+                    currentCard = { type: 'desafio', subtype: 'palabra_prohibida', data: pelicula, challenge: { desc: textInst } };
+                    document.getElementById('deck-badge').innerText = '🚫 DESAFÍO: PALABRA PROHIBIDA (40s)';
+                    document.getElementById('deck-badge').style.background = '#ff0055';
+                    prepararDesafioPrivado(pelicula, '🚫 DESAFÍO: PALABRA PROHIBIDA', textInst, '#ff0055');
+                    document.getElementById('deck-challenge-mask').style.display = 'block';
+                } else {
+                    // Mímica
+                    const d = DESAFIOS.mimica[Math.floor(Math.random() * DESAFIOS.mimica.length)];
+                    currentCard = { type: 'desafio', subtype: 'mimica', data: pelicula, challenge: d };
+                    document.getElementById('deck-badge').innerText = '🎭 DESAFÍO: MÍMICA (40s)';
+                    document.getElementById('deck-badge').style.background = '#b388eb';
+                    prepararDesafioPrivado(pelicula, '🎭 DESAFÍO: MÍMICA', d.desc, '#b388eb');
+                    document.getElementById('deck-challenge-mask').style.display = 'block';
+                }
             }
 
             document.getElementById('deck-title-text').innerText = pelicula.title;
@@ -680,7 +804,6 @@
         function toggleAudioMazo() {
             if (!currentCard || !currentCard.data) return;
             const pelicula = currentCard.data;
-            
             const audioPlayer = document.getElementById('game-audio') || gameAudio;
 
             if (!audioPlayer.paused && gameAudioMode === 'normal') {
@@ -705,10 +828,8 @@
                 if (circle) circle.innerText = '⏸️';
                 const text = document.getElementById('audio-btn-text');
                 if (text) text.innerText = 'PAUSAR CANCIÓN';
-                const sub = document.getElementById('audio-btn-sub');
-                if (sub) sub.innerText = '🎶 Música Sonando en la App (30s)';
                 const badge = document.getElementById('audio-timer-badge');
-                if (badge) badge.style.display = 'block';
+                if (badge) badge.style.display = 'inline-block';
                 iniciarTimerAudio(30);
             }).catch(err => {
                 console.error("Error al reproducir audio:", err);
@@ -726,8 +847,6 @@
             if (circle) circle.innerText = '▶️';
             const text = document.getElementById('audio-btn-text');
             if (text) text.innerText = 'ESCUCHAR CANCIÓN';
-            const sub = document.getElementById('audio-btn-sub');
-            if (sub) sub.innerText = '🔒 Carátula y Datos Ocultos';
             const badge = document.getElementById('audio-timer-badge');
             if (badge) badge.style.display = 'none';
         }
@@ -747,7 +866,7 @@
                     pausarAudioMazo();
                     if (rest <= 0) {
                         const text = document.getElementById('audio-btn-text');
-                        if (text) text.innerText = '⏰ 30s CUMPLIDOS (VOLVER A ESCUCHAR)';
+                        if (text) text.innerText = '⏰ 30s CUMPLIDOS (ESCUCHAR)';
                     }
                 }
             }, 1000);
@@ -800,11 +919,11 @@
 
             secretMusicTimerInterval = setInterval(() => {
                 rest--;
-                if (btn) btn.innerText = '⏸️ MÚSICA SECRETA SONANDO (' + rest + 's)... TOCAR PARA PAUSAR';
+                if (btn) btn.innerText = '⏸️ MÚSICA SECRETA (' + rest + 's)... TOCAR PARA PAUSAR';
                 if (rest <= 0 || audioPlayer.paused || audioPlayer.ended) {
                     pausarSecretAudio();
                     if (rest <= 0 && btn) {
-                        btn.innerText = '⏰ ¡30s FINALIZADOS! TOCAR PARA ESCUCHAR DE NUEVO';
+                        btn.innerText = '⏰ ¡30s FINALIZADOS! TOCAR PARA REPETIR';
                     }
                 }
             }, 1000);
@@ -836,72 +955,41 @@
             document.getElementById('deck-revealed').style.display = 'block';
         }
 
-        // --- LÓGICA MODO ESCÁNER QR ---
-        function activarCamaraQR() {
-            document.getElementById('scanner-box').style.display = 'block';
-            document.getElementById('scanner-player').style.display = 'none';
-
-            if (!html5QrCode) {
-                html5QrCode = new Html5Qrcode("reader");
-            }
-
-            html5QrCode.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: 220 },
-                (decodedText) => {
-                    try {
-                        const url = new URL(decodedText);
-                        const songId = url.searchParams.get('id') || decodedText.split('/track/')[1];
-                        if (songId) {
-                            html5QrCode.stop().then(() => mostrarReproductorQR(songId));
-                        }
-                    } catch(e) {
-                        if (decodedText.includes('/track/')) {
-                            const parts = decodedText.split('/track/');
-                            const songId = parts[1].split('?')[0];
-                            html5QrCode.stop().then(() => mostrarReproductorQR(songId));
-                        }
-                    }
-                },
-                () => {}
-            ).catch(() => {});
-        }
-
-        function mostrarReproductorQR(songId) {
-            document.getElementById('scanner-box').style.display = 'none';
-            document.getElementById('scanner-player').style.display = 'block';
-
-            document.getElementById('spotify-target').innerHTML = `
-                <iframe src="https://open.spotify.com/embed/track/${songId}?utm_source=generator&theme=0" 
-                    width="100%" height="80" frameborder="0" allow="autoplay; clipboard-write; encrypted-media"></iframe>
-                <div class="spotify-mask-overlay" id="qr-mask" onclick="revelarPeliculaQR()">🍿 Toca aquí para ver la película</div>
-            `;
-        }
-
-        function revelarPeliculaQR() {
-            const mask = document.getElementById('qr-mask');
-            if (mask) mask.style.display = 'none';
-        }
-
         // --- LÓGICA MODO CONTEO (MARCADOR DE EQUIPOS) ---
         function renderMarcador() {
             const list = document.getElementById('scoreboard-list');
             list.innerHTML = '';
 
+            const skinMiniScores = document.getElementById('skin-mini-scores');
+            if (skinMiniScores) skinMiniScores.innerHTML = '';
+
             equipos.forEach(e => {
+                // Tarjeta en pestaña Marcador
                 const item = document.createElement('div');
                 item.className = 'team-card';
                 item.innerHTML = `
                     <div class="team-name" onclick="renombrarEquipo(${e.id})">${e.nombre} ✏️</div>
-                    <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
                         <div class="team-score">${e.puntos}</div>
                         <div class="score-btns">
                             <button class="btn-score btn-minus" onclick="modificarPuntos(${e.id}, -1)">-</button>
                             <button class="btn-score btn-plus" onclick="modificarPuntos(${e.id}, 1)">+</button>
+                            <button class="btn-score btn-delete" onclick="eliminarEquipo(${e.id})" style="background: rgba(230,57,70,0.2); color: #ff4d6d; border: 1px solid rgba(230,57,70,0.4);" title="Eliminar equipo">🗑️</button>
                         </div>
                     </div>
                 `;
                 list.appendChild(item);
+
+                // Cápsula en pestaña Mazo Juego (Skin Cinesonoro)
+                if (skinMiniScores) {
+                    const cap = document.createElement('div');
+                    cap.className = 'skin-score-capsule';
+                    cap.innerHTML = `
+                        <div class="skin-team-label">${e.nombre}</div>
+                        <div class="skin-team-val">${e.puntos}</div>
+                    `;
+                    skinMiniScores.appendChild(cap);
+                }
             });
 
             localStorage.setItem('cinesonoro_equipos', JSON.stringify(equipos));
@@ -922,6 +1010,18 @@
             renderMarcador();
         }
 
+        function eliminarEquipo(id) {
+            if (equipos.length <= 1) {
+                alert('Debe haber al menos 1 equipo en la partida.');
+                return;
+            }
+            const eq = equipos.find(e => e.id === id);
+            if (eq && confirm(`¿Deseas eliminar el equipo "${eq.nombre}"?`)) {
+                equipos = equipos.filter(e => e.id !== id);
+                renderMarcador();
+            }
+        }
+
         function renombrarEquipo(id) {
             const eq = equipos.find(e => e.id === id);
             if (eq) {
@@ -934,7 +1034,7 @@
         }
 
         function reiniciarMarcador() {
-            if (confirm('¿Reiniciar puntos a cero?')) {
+            if (confirm('¿Reiniciar puntos de todos los equipos a cero?')) {
                 equipos.forEach(e => e.puntos = 0);
                 document.getElementById('winner-banner').style.display = 'none';
                 renderMarcador();
