@@ -139,19 +139,30 @@
 
         /* --- CARTA PRINCIPAL (Skin Cinesonoro) --- */
         
-        /* --- ANIMACIÓN TIRITÓN AL SACAR CARTA (V55) --- */
-        @keyframes shakeCard {
-            0% { transform: scale(1) rotate(0deg); }
-            20% { transform: scale(0.96) rotate(-2.5deg) translateY(3px); }
-            40% { transform: scale(1.03) rotate(2.5deg) translateY(-3px); }
-            60% { transform: scale(0.98) rotate(-1.5deg) translateY(2px); }
-            80% { transform: scale(1.01) rotate(1deg); }
-            100% { transform: scale(1) rotate(0deg); }
+        /* --- ANIMACIÓN DESLIZAMIENTO DE MAZO - CARD DEAL (V56) --- */
+        @keyframes cardDeal {
+            0% {
+                transform: translateY(0) translateX(0) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            32% {
+                transform: translateY(38px) translateX(28px) scale(0.86) rotate(5deg);
+                opacity: 0.35;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            }
+            33% {
+                transform: translateY(-45px) translateX(-10px) scale(0.92) rotate(-3deg);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0) translateX(0) scale(1) rotate(0deg);
+                opacity: 1;
+                box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 183, 3, 0.5);
+            }
         }
 
-        .shake-card {
-            animation: shakeCard 0.38s ease-in-out !important;
-            box-shadow: 0 0 35px rgba(255, 183, 3, 0.7) !important;
+        .card-deal-anim {
+            animation: cardDeal 0.48s cubic-bezier(0.22, 1, 0.36, 1) !important;
         }
 
         .card-display {
@@ -813,15 +824,15 @@
         }
 
         function sacarCartaMazo() {
-            // Animación Tiritón de Acción en la tarjeta (V55)
+            // Animación Deslizamiento de Mazo (Card Deal / Slide-In) (V56)
             const deckCard = document.getElementById('deck-card');
             if (deckCard) {
-                deckCard.classList.remove('shake-card');
+                deckCard.classList.remove('card-deal-anim');
                 void deckCard.offsetWidth;
-                deckCard.classList.add('shake-card');
+                deckCard.classList.add('card-deal-anim');
                 setTimeout(function() {
-                    deckCard.classList.remove('shake-card');
-                }, 400);
+                    deckCard.classList.remove('card-deal-anim');
+                }, 500);
             }
             clearInterval(timerInterval);
             clearInterval(musicTimerInterval);
