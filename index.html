@@ -205,6 +205,52 @@
             animation: confettiFall 2.2s linear infinite;
         }
 
+        /* --- ECUALIZADOR ANIMADO (GIF + CSS FALLBACK) --- */
+        .equalizer-container-box {
+            display: none;
+            width: 100%;
+            min-height: 90px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .equalizer-bars-css {
+            display: none;
+            width: 100%;
+            height: 80px;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 0;
+        }
+
+        .eq-bar {
+            width: 8px;
+            height: 15px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 245, 212, 0.6);
+            animation: bounceEq 1.2s ease-in-out infinite alternate;
+        }
+
+        .eq-bar.bar1  { background: linear-gradient(180deg, #ff0055, #ffb703); animation-duration: 0.55s; animation-delay: 0.1s; }
+        .eq-bar.bar2  { background: linear-gradient(180deg, #00f5d4, #0077b6); animation-duration: 0.75s; animation-delay: 0.3s; }
+        .eq-bar.bar3  { background: linear-gradient(180deg, #7209b7, #f72585); animation-duration: 0.45s; animation-delay: 0.0s; }
+        .eq-bar.bar4  { background: linear-gradient(180deg, #ff9e00, #ff0055); animation-duration: 0.85s; animation-delay: 0.4s; }
+        .eq-bar.bar5  { background: linear-gradient(180deg, #38b000, #ccff00); animation-duration: 0.65s; animation-delay: 0.2s; }
+        .eq-bar.bar6  { background: linear-gradient(180deg, #4cc9f0, #4361ee); animation-duration: 0.60s; animation-delay: 0.5s; }
+        .eq-bar.bar7  { background: linear-gradient(180deg, #f72585, #b5179e); animation-duration: 0.80s; animation-delay: 0.15s; }
+        .eq-bar.bar8  { background: linear-gradient(180deg, #ffb703, #fb8500); animation-duration: 0.50s; animation-delay: 0.35s; }
+        .eq-bar.bar9  { background: linear-gradient(180deg, #00f5d4, #7209b7); animation-duration: 0.70s; animation-delay: 0.05s; }
+        .eq-bar.bar10 { background: linear-gradient(180deg, #ff0055, #7209b7); animation-duration: 0.62s; animation-delay: 0.25s; }
+
+        @keyframes bounceEq {
+            0% { height: 10px; transform: scaleY(1); opacity: 0.6; }
+            50% { height: 68px; transform: scaleY(1.15); opacity: 1; filter: brightness(1.3); }
+            100% { height: 18px; transform: scaleY(0.85); opacity: 0.8; }
+        }
+
         /* --- ILUSTRACIÓN DE ESCUCHA (Imagen escuchar.png con Fallback) --- */
         .skin-illustration-box {
             width: 100%;
@@ -493,16 +539,38 @@
                 <!-- Máscara 1: Para Películas Normales -->
                 <div class="card-mask" id="deck-normal-mask" style="display: block;">
                     
-                    <!-- Ilustración de Escuchar (Imagen escuchar.png con Fallback a Emojis) -->
+                    <!-- Ilustración de Escuchar (Imagen escuchar.png con GIF Ecualizador y Fallback CSS) -->
                     <div class="skin-illustration-box" id="illustration-normal-box">
-                        <img src="Imagen escuchar.png" alt="Escuchar" 
-                            onerror="this.style.display='none'; document.getElementById('art-fallback').style.display='block';"
-                            style="max-width: 140px; width: 80%; height: auto; margin-bottom: 8px; filter: drop-shadow(0 0 12px rgba(255, 183, 3, 0.5)); border-radius: 12px;">
+                        <div id="art-image-wrapper" style="display: block; text-align: center;">
+                            <img src="Imagen escuchar.png" alt="Escuchar" 
+                                onerror="this.style.display='none'; document.getElementById('art-fallback').style.display='block';"
+                                style="max-width: 140px; width: 80%; height: auto; margin-bottom: 8px; filter: drop-shadow(0 0 12px rgba(255, 183, 3, 0.5)); border-radius: 12px;">
+                            
+                            <div id="art-fallback" class="headphone-art-fallback" style="display: none;">🎧👂🎶</div>
+                        </div>
+
+                        <!-- Ecualizador (ecualizador.gif con Fallback CSS Multicolor) -->
+                        <div id="equalizer-box" class="equalizer-container-box" style="display: none;">
+                            <img id="gif-equalizer" src="ecualizador.gif" alt="Ecualizador" 
+                                onerror="this.setAttribute('data-failed', 'true'); this.style.display='none'; document.getElementById('css-equalizer-bars').style.display='flex';"
+                                style="max-height: 85px; width: auto; max-width: 90%; margin-bottom: 6px; border-radius: 8px; filter: drop-shadow(0 0 10px rgba(0,245,212,0.5));">
+
+                            <div id="css-equalizer-bars" class="equalizer-bars-css" style="display: none;">
+                                <div class="eq-bar bar1"></div>
+                                <div class="eq-bar bar2"></div>
+                                <div class="eq-bar bar3"></div>
+                                <div class="eq-bar bar4"></div>
+                                <div class="eq-bar bar5"></div>
+                                <div class="eq-bar bar6"></div>
+                                <div class="eq-bar bar7"></div>
+                                <div class="eq-bar bar8"></div>
+                                <div class="eq-bar bar9"></div>
+                                <div class="eq-bar bar10"></div>
+                            </div>
+                        </div>
                         
-                        <div id="art-fallback" class="headphone-art-fallback" style="display: none;">🎧👂🎶</div>
-                        
-                        <div class="skin-art-text">¡Presta mucha atención!</div>
-                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">Tienes 30 segundos para escuchar</div>
+                        <div class="skin-art-text" id="skin-art-title">¡Presta mucha atención!</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;" id="skin-art-subtitle">Tienes 30 segundos para escuchar</div>
                     </div>
 
                     <!-- Trofeo con Confeti cuando un equipo alcanza la Meta -->
@@ -529,7 +597,12 @@
 
                 <!-- Máscara 2: Para DESAFÍOS (Tararea, Mímica) -->
                 <div class="card-mask" id="deck-challenge-mask" style="display: none; background: #0a1122; border: 2px solid var(--accent-gold); border-radius: 20px; padding: 20px;">
-                    <div style="font-size: 2.8rem; margin-bottom: 8px;">🔒</div>
+                    <div style="margin-bottom: 8px; display: flex; justify-content: center; align-items: center; width: 100%;">
+                        <img src="desafio.gif" alt="Desafío Secreto" 
+                            onerror="this.style.display='none'; document.getElementById('desafio-fallback').style.display='block';"
+                            style="max-width: 130px; width: 75%; height: auto; border-radius: 14px; filter: drop-shadow(0 0 12px rgba(255, 183, 3, 0.5));">
+                        <div id="desafio-fallback" style="display: none; font-size: 2.8rem;">🔒</div>
+                    </div>
                     <div style="font-weight: 900; color: var(--accent-gold); font-size: 1.15rem; margin-bottom: 6px;">DESAFÍO EN SECRETO</div>
                     <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.4;">
                         Un participante toma el teléfono. La película está oculta para que tus compañeros puedan adivinar.
@@ -1024,11 +1097,47 @@ function toggleAudioMazo() {
                 if (text) text.innerText = 'PAUSAR CANCIÓN';
                 const badge = document.getElementById('audio-timer-badge');
                 if (badge) badge.style.display = 'inline-block';
+                mostrarEcualizador();
                 iniciarTimerAudio(30);
             }).catch(err => {
                 console.error("Error al reproducir audio:", err);
                 alert("Toca 'ESCUCHAR CANCIÓN' de nuevo para reproducir el audio.");
             });
+        }
+
+        function mostrarEcualizador() {
+            const wrapper = document.getElementById('art-image-wrapper');
+            const eqBox = document.getElementById('equalizer-box');
+            const gifImg = document.getElementById('gif-equalizer');
+            const cssEq = document.getElementById('css-equalizer-bars');
+            const title = document.getElementById('skin-art-title');
+            const subtitle = document.getElementById('skin-art-subtitle');
+
+            if (wrapper) wrapper.style.display = 'none';
+            if (eqBox) eqBox.style.display = 'flex';
+
+            if (gifImg && gifImg.getAttribute('data-failed') !== 'true') {
+                gifImg.style.display = 'block';
+                if (cssEq) cssEq.style.display = 'none';
+            } else if (cssEq) {
+                if (gifImg) gifImg.style.display = 'none';
+                cssEq.style.display = 'flex';
+            }
+
+            if (title) title.innerText = '🎵 REPRODUCIENDO BANDA SONORA...';
+            if (subtitle) subtitle.innerText = 'Escucha con atención para adivinar';
+        }
+
+        function ocultarEcualizador() {
+            const wrapper = document.getElementById('art-image-wrapper');
+            const eqBox = document.getElementById('equalizer-box');
+            const title = document.getElementById('skin-art-title');
+            const subtitle = document.getElementById('skin-art-subtitle');
+
+            if (wrapper) wrapper.style.display = 'block';
+            if (eqBox) eqBox.style.display = 'none';
+            if (title) title.innerText = '¡Presta mucha atención!';
+            if (subtitle) subtitle.innerText = 'Tienes 30 segundos para escuchar';
         }
 
         function pausarAudioMazo() {
@@ -1043,6 +1152,8 @@ function toggleAudioMazo() {
             if (text) text.innerText = 'ESCUCHAR CANCIÓN';
             const badge = document.getElementById('audio-timer-badge');
             if (badge) badge.style.display = 'none';
+
+            ocultarEcualizador();
         }
 
         function iniciarTimerAudio(segundos) {
