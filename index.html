@@ -176,6 +176,35 @@
             justify-content: center;
         }
 
+        /* --- TROFEO Y CONFETI AL ALCANZAR LA META --- */
+        @keyframes trophyPop {
+            0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+            60% { transform: scale(1.15) rotate(5deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes trophyFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
+        }
+
+        .trophy-bounce {
+            animation: trophyPop 0.6s ease-out forwards, trophyFloat 2.5s ease-in-out infinite 0.6s;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-15px) rotate(0deg) scale(0.7); opacity: 1; }
+            100% { transform: translateY(130px) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        .confetti-piece {
+            position: absolute;
+            top: -10px;
+            font-size: 1.2rem;
+            pointer-events: none;
+            animation: confettiFall 2.2s linear infinite;
+        }
+
         /* --- ILUSTRACIÓN DE ESCUCHA (Imagen escuchar.png con Fallback) --- */
         .skin-illustration-box {
             width: 100%;
@@ -453,7 +482,7 @@
         <!-- NAVEGACIÓN ENTRE MODOS -->
         <div class="mode-nav">
             <button class="nav-btn active" id="nav-mazo" onclick="cambiarModo('mazo')">🎴 Mazo Juego</button>
-            <button class="nav-btn" id="nav-conteo" onclick="cambiarModo('conteo')">📊 Marcador (<span id="nav-target-display">10</span> pts)</button>
+            <button class="nav-btn" id="nav-conteo" onclick="cambiarModo('conteo')">🏆 Gana con <span id="nav-target-display">10</span></button>
         </div>
 
         <!-- ==================== VISTA 1: MODO MAZO ==================== -->
@@ -465,7 +494,7 @@
                 <div class="card-mask" id="deck-normal-mask" style="display: block;">
                     
                     <!-- Ilustración de Escuchar (Imagen escuchar.png con Fallback a Emojis) -->
-                    <div class="skin-illustration-box">
+                    <div class="skin-illustration-box" id="illustration-normal-box">
                         <img src="Imagen escuchar.png" alt="Escuchar" 
                             onerror="this.style.display='none'; document.getElementById('art-fallback').style.display='block';"
                             style="max-width: 140px; width: 80%; height: auto; margin-bottom: 8px; filter: drop-shadow(0 0 12px rgba(255, 183, 3, 0.5)); border-radius: 12px;">
@@ -474,6 +503,14 @@
                         
                         <div class="skin-art-text">¡Presta mucha atención!</div>
                         <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">Tienes 30 segundos para escuchar</div>
+                    </div>
+
+                    <!-- Trofeo con Confeti cuando un equipo alcanza la Meta -->
+                    <div id="winner-trophy-box" style="display: none; position: relative; text-align: center; padding: 18px 12px; background: rgba(255, 183, 3, 0.12); border: 2px solid var(--accent-gold); border-radius: 20px; margin: 10px 0 15px 0; width: 100%; overflow: hidden; box-shadow: 0 0 25px rgba(255, 183, 3, 0.35);">
+                        <div class="confetti-container" id="confetti-holder" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
+                        <div class="trophy-bounce" style="font-size: 3.8rem; line-height: 1; margin-bottom: 6px; filter: drop-shadow(0 0 15px #ffc107);">🏆</div>
+                        <div id="winner-trophy-team" style="font-size: 1.25rem; font-weight: 900; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 2px 10px rgba(0,0,0,0.8);">¡EQUIPO GANADOR!</div>
+                        <div id="winner-trophy-sub" style="font-size: 0.85rem; color: #ffffff; font-weight: 800; margin-top: 4px;">🎉 ¡Alcanzó la meta de aciertos! 🎊</div>
                     </div>
 
                     <!-- Reproductor NATIVO Integrado -->
@@ -674,9 +711,14 @@
         }
 
         function reiniciarMazo() {
-            if (confirm('¿Deseas reiniciar el mazo para volver a jugar todas las películas?')) {
+            if (confirm('¿Deseas reiniciar el mazo y los puntos de todos los equipos a cero?')) {
                 peliculasJugadas = [];
                 localStorage.setItem('cinesonoro_pelis_jugadas', JSON.stringify(peliculasJugadas));
+                
+                // Reiniciar puntos de equipos a cero
+                equipos.forEach(e => e.puntos = 0);
+                renderMarcador();
+                
                 sacarCartaMazo();
             }
         }
@@ -1198,7 +1240,11 @@ function accionarVerDesafioPrivado() {
                     cap.className = 'skin-score-capsule';
                     cap.innerHTML = `
                         <div class="skin-team-label">${e.nombre}</div>
-                        <div class="skin-team-val">${e.puntos}</div>
+                        <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                            <button onclick="modificarPuntos(${e.id}, -1)" style="background: rgba(255,255,255,0.15); color: #ff4d6d; border: 1px solid rgba(255,77,109,0.5); border-radius: 50%; width: 28px; height: 28px; font-weight: 900; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1;">-</button>
+                            <div class="skin-team-val" style="font-size: 1.3rem; font-weight: 900; color: #ffffff; min-width: 20px; text-align: center;">${e.puntos}</div>
+                            <button onclick="modificarPuntos(${e.id}, 1)" style="background: rgba(255,255,255,0.15); color: var(--accent-gold); border: 1px solid var(--accent-gold); border-radius: 50%; width: 28px; height: 28px; font-weight: 900; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1;">+</button>
+                        </div>
                     `;
                     skinMiniScores.appendChild(cap);
                 }
@@ -1253,14 +1299,43 @@ function accionarVerDesafioPrivado() {
             }
         }
 
+        function lanzarConfeti() {
+            const holder = document.getElementById('confetti-holder');
+            if (!holder) return;
+            holder.innerHTML = '';
+            const emojis = ['🎉', '🎊', '✨', '🌟', '🏆', '🎈', '⭐', '💫'];
+            for (let i = 0; i < 24; i++) {
+                const p = document.createElement('div');
+                p.className = 'confetti-piece';
+                p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                p.style.left = (Math.random() * 92 + 4) + '%';
+                p.style.animationDelay = (Math.random() * 2) + 's';
+                p.style.animationDuration = (1.6 + Math.random() * 1.4) + 's';
+                holder.appendChild(p);
+            }
+        }
+
         function verificarGanador() {
             const ganador = equipos.find(e => e.puntos >= metaPuntos);
             const banner = document.getElementById('winner-banner');
+            const normalBox = document.getElementById('illustration-normal-box');
+            const trophyBox = document.getElementById('winner-trophy-box');
+
             if (ganador) {
                 document.getElementById('winner-team-name').innerText = ganador.nombre.toUpperCase() + ' (' + metaPuntos + ' PELÍCULAS)';
                 banner.style.display = 'block';
+
+                if (normalBox) normalBox.style.display = 'none';
+                if (trophyBox) {
+                    trophyBox.style.display = 'block';
+                    document.getElementById('winner-trophy-team').innerText = '🏆 ¡' + ganador.nombre.toUpperCase() + ' GANÓ! 🏆';
+                    document.getElementById('winner-trophy-sub').innerText = '🎉 ¡Alcanzó la meta de ' + metaPuntos + ' aciertos! 🎊';
+                    lanzarConfeti();
+                }
             } else {
                 banner.style.display = 'none';
+                if (normalBox) normalBox.style.display = 'flex';
+                if (trophyBox) trophyBox.style.display = 'none';
             }
         }
     </script>
