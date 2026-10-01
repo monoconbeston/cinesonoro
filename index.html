@@ -138,6 +138,22 @@
         }
 
         /* --- CARTA PRINCIPAL (Skin Cinesonoro) --- */
+        
+        /* --- ANIMACIÓN TIRITÓN AL SACAR CARTA (V55) --- */
+        @keyframes shakeCard {
+            0% { transform: scale(1) rotate(0deg); }
+            20% { transform: scale(0.96) rotate(-2.5deg) translateY(3px); }
+            40% { transform: scale(1.03) rotate(2.5deg) translateY(-3px); }
+            60% { transform: scale(0.98) rotate(-1.5deg) translateY(2px); }
+            80% { transform: scale(1.01) rotate(1deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .shake-card {
+            animation: shakeCard 0.38s ease-in-out !important;
+            box-shadow: 0 0 35px rgba(255, 183, 3, 0.7) !important;
+        }
+
         .card-display {
             background: var(--card-bg);
             border: 2px solid var(--accent-gold);
@@ -797,6 +813,16 @@
         }
 
         function sacarCartaMazo() {
+            // Animación Tiritón de Acción en la tarjeta (V55)
+            const deckCard = document.getElementById('deck-card');
+            if (deckCard) {
+                deckCard.classList.remove('shake-card');
+                void deckCard.offsetWidth;
+                deckCard.classList.add('shake-card');
+                setTimeout(function() {
+                    deckCard.classList.remove('shake-card');
+                }, 400);
+            }
             clearInterval(timerInterval);
             clearInterval(musicTimerInterval);
             clearInterval(secretMusicTimerInterval);
